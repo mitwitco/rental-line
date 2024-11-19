@@ -11,18 +11,8 @@ app.use(cors())
 // app.use(express.json())
 // app.use(express.urlencoded({ extended: false }))
 
-
-app.use((req, res, next) => {
-  if (req.path.startsWith('/line')) {
-    next();
-  }
-  express.json()(req, res, (err) => {
-    if (err) return next(err);
-    express.urlencoded({ extended: false })(req, res, next);
-  });
-});
-
 app.use('/', route)
+app.use('/line',route)
 
 router.use(express.static('dist'))
 router.get('*', (req, res) => { //變數
