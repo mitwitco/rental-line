@@ -9,5 +9,23 @@
     "dialectOptions": {
       "charset": "utf8"
     }
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "mitwit_out",
+    "password": "mw@56632513s",
+    "database": "jutai",
+    "host": "114.32.150.22",
+    "port": "3306",
+    "dialect": "mysql",
+    "dialectOptions": {
+      "charset": "utf8"
+    }
   }
 }
