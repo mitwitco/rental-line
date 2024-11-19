@@ -25,6 +25,6 @@ router.get('*', (req, res) => { //變數
 })
 app.use(router)
 
-const server = app.listen( 3348, () => {
+const server = app.listen( process.env.PORT || 3348, () => {
     console.log(`Application works on port: ${server.address().port}`)
 })
