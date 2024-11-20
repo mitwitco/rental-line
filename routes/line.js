@@ -2,6 +2,7 @@ const express = require('express')
 const router = require('express').Router()
 const linebot = require('linebot')
 const Controllers = require('../controllers')
+const Controllers2 = require('../controllers/controller')
 
 // 鉅泰
 const bot = linebot({
@@ -13,7 +14,8 @@ const bot = linebot({
 
 const linebotParser = bot.parser();
 router.post('/linewebhook', linebotParser);
-
+//JASON
+router.post('/', Controllers2.linebotParser);
 // 處理使用者加入好友事件
 bot.on('follow', Controllers.line.linejoin);
 bot.on('unfollow', Controllers.line.lineUnjoin);
