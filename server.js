@@ -5,7 +5,7 @@ const fs = require('fs')
 const path = require('path')
 
 const router = express.Router()
-
+app.use(express.json())
 const app = express()
 app.use(cors())
 // app.use(express.json())
