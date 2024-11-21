@@ -154,7 +154,7 @@ module.exports = ({ sequelize }) => {
                             ]
                           }
                         },
-                        { type: "text", text: `帳務資訊：${JSON.stringify(resData)}` },
+                        // { type: "text", text: `帳務資訊：${JSON.stringify(resData)}` },
                       ];
               
                     // 發送訊息
