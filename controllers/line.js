@@ -158,7 +158,7 @@ module.exports = ({ sequelize }) => {
               
                     // 發送訊息
                     await req.reply(messages);
-                    await req.reply(data);
+                    await req.reply(messages);
                     console.log(profile);  // 印出 profile 資訊
               
                   } catch (error) {
