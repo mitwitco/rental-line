@@ -53,7 +53,7 @@ module.exports = ({ sequelize }) => {
                     altText: "點擊此連結進行帳務資訊查詢",
                     template: {
                         type: "buttons",
-                        text: `${profile.displayName}您好！\n感謝您將本帳號加入好友!\n請您點選下方綁定按鈕做客戶綁定\n此官方帳號\n將定期發放最新資訊給您\n敬請期待!`,
+                        text: `${profile.displayName}您好！\n感謝您將本帳號加入好友!\n請您點選下方按鈕做客戶綁定\n此官方帳號\n將定期發放最新資訊給您\n敬請期待!`,
                         actions: [
                             {
                                 type: "uri",
