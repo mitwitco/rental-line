@@ -122,7 +122,7 @@ module.exports = ({ sequelize }) => {
                     // 若訊息為 "綁定"，取得用戶的 profile
                     const profile = await req.source.profile();  // 取得 profile
                     const ID = profile.userId;
-                    const data=''
+                    let data=''
                     const url=`http://122.116.23.30:3347/basic-info/AccessControl?userId=${ID}`
                     await axios.get('http://122.116.23.30:3347/main/selectCustomer')
                     .then(response => {
@@ -153,12 +153,13 @@ module.exports = ({ sequelize }) => {
                               }
                             ]
                           }
-                        }
+                        },
+                        { type: "text", text: `查詢結果：${JSON.stringify(data)}` },
                       ];
               
                     // 發送訊息
                     await req.reply(messages);
-                    await req.reply(messages);
+
                     console.log(profile);  // 印出 profile 資訊
               
                   } catch (error) {
