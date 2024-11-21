@@ -151,7 +151,7 @@ module.exports = ({ sequelize }) => {
                             ]
                           }
                         },
-                        { type: "text", text: `查詢結果：${JSON.stringify(resData)}` },
+                        { type: "text", text: `查詢結果：${ID}` },
                       ];
               
                     // 發送訊息
