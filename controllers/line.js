@@ -4,6 +4,7 @@ module.exports = ({ sequelize }) => {
     const Sequelize = require('sequelize');
     const Op = Sequelize.Op;
     const dayjs = require('dayjs')
+    const axios = require('axios'); 
 
     const getDateTime = (input = null, timeFormat = 'YYYY-MM-DD HH:mm:ss') => {
         let date = input ? input : new Date();
@@ -112,6 +113,7 @@ module.exports = ({ sequelize }) => {
                 return { returnCode: 500, message: "系統錯誤", err: err }
             }
         },
+        //JASON
         linemessage:async (req, res)  => {{
              
                 // 確認收到的訊息是否為 "綁定"
@@ -120,8 +122,17 @@ module.exports = ({ sequelize }) => {
                     // 若訊息為 "綁定"，取得用戶的 profile
                     const profile = await req.source.profile();  // 取得 profile
                     const ID = profile.userId;
+                    const data=''
                     const url=`http://122.116.23.30:3347/basic-info/AccessControl?userId=${ID}`
-                   
+                    await axios.get('http://122.116.23.30:3347/main/selectCustomer')
+                    .then(response => {
+                        data=response.data.data
+                      })
+                      .catch(error => {
+                        // 處理錯誤
+                        console.error('查詢餘額API有誤', error);
+                      });
+
                     const messages = [
                         {
                           type: "template",
@@ -147,6 +158,7 @@ module.exports = ({ sequelize }) => {
               
                     // 發送訊息
                     await req.reply(messages);
+                    await req.reply(data);
                     console.log(profile);  // 印出 profile 資訊
               
                   } catch (error) {
