@@ -124,12 +124,12 @@ module.exports = ({ sequelize }) => {
                     const ID = profile.userId;
                     let resData=''
                     const url=`http://122.116.23.30:3347/basic-info/AccessControl?userId=${ID}`
-                    try {
-                        const response = await axios.post('http://122.116.23.30:3347/link/balance',ID);
-                        resData = response.data.data[0];
-                      } catch (error) {
-                        console.error('查詢餘額API有誤', error);
-                      }
+                    // try {
+                    //     const response = await axios.post('http://122.116.23.30:3347/link/balance',ID);
+                    //     resData = response.data.data[0];
+                    //   } catch (error) {
+                    //     console.error('查詢餘額API有誤', error);
+                    //   }
                     const messages = [
                         {
                           type: "template",
@@ -151,7 +151,7 @@ module.exports = ({ sequelize }) => {
                             ]
                           }
                         },
-                        { type: "text", text: `查詢結果：${JSON.stringify(resData)}` },
+                        // { type: "text", text: `查詢結果：${JSON.stringify(resData)}` },
                       ];
               
                     // 發送訊息
