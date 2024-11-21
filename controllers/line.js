@@ -7,8 +7,13 @@ module.exports = ({ sequelize }) => {
     const axios = require('axios'); 
 
     const getDateTime = (input = null, timeFormat = 'YYYY-MM-DD HH:mm:ss') => {
+        dayjs.extend(utc)
+        dayjs.extend(timezone)
         let date = input ? input : new Date();
-        let dateTime = dayjs(date).format(timeFormat)
+        const utcTime = dayjs(date).utc()
+        // 將時區設定為台北
+        const taiwanTime = utcTime.tz('Asia/Taipei');
+        let dateTime = taiwanTime.format(timeFormat)
         return dateTime
     }
 
