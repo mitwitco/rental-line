@@ -46,7 +46,7 @@ module.exports = ({ sequelize }) => {
                     })
                 }
                 //JASON 綁定
-                const url=`http://122.116.23.30:3347/basic-info/AccessControl?userId=${ID}`
+                const url=`http://122.116.23.30:3347/basic-info/AccessControl?userId=${userId}`
                 const messages = [
                     {
                     type: "template",
