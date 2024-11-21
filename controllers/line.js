@@ -45,6 +45,27 @@ module.exports = ({ sequelize }) => {
                         memberJoinTime: time,
                     })
                 }
+                //JASON 綁定
+                const url=`http://122.116.23.30:3347/basic-info/AccessControl?userId=${ID}`
+                const messages = [
+                    {
+                    type: "template",
+                    altText: "點擊此連結進行帳務資訊查詢",
+                    template: {
+                        type: "buttons",
+                        text: `${profile.displayName}您好！感謝您將本帳號加入好友，請您點選下方綁定按鈕做客戶連結綁定\n此官方帳號將定期發放最新資訊給您\n敬請期待`,
+                        actions: [
+                            {
+                                type: "uri",
+                                label: "綁定帳號",
+                                uri: url
+                            }
+                        ]
+                     }
+                    }
+                ];
+                // 發送訊息
+                await req.reply(messages);
                 console.log({ returnCode: 0, message: "處理 LINE 加好友事件" })
                 return { returnCode: 0, message: "處理 LINE 加好友事件" }
             } catch (err) {
