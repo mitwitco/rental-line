@@ -121,62 +121,92 @@ module.exports = ({ sequelize }) => {
             }
         },
         //JASON
-        linemessage: async (req, res) => {
-            {
-
-                // 確認收到的訊息是否為 "綁定"
-                 if (req.message.type === 'text' && req.message.text === '帳務資訊') {
-                  try {
-                    // 若訊息為 "綁定"，取得用戶的 profile
-                    const profile = await req.source.profile();  // 取得 profile
-                    const ID = profile.userId;
-                    let resData=''
-                    const url=`http://122.116.23.30:3347/basic-info/AccessControl?userId=${ID}`
-                    try {
-                        const postdata={
-                            memberLineId:ID
-                          }
-                        const response = await axios.post('http://122.116.23.30:3347/link/balance',postdata);
-                        resData = response.data.data[0];
-                      } catch (error) {
-                        console.error('查詢餘額API有誤', error);
-                      }
-                    const messages = [
-                        {
-                          type: "template",
-                          altText: "點擊此連結進行帳務資訊查詢",
-                          template: {
-                            type: "buttons",
-                            text: `Hello ${profile.displayName}，點擊下方按鈕選擇功能：`,
-                            actions: [
-                              {
-                                type: "uri",
-                                label: "綁定帳號",
-                                uri: url
-                              },
-                              {
-                                type: "uri",
-                                label: "帳務查詢網站",
-                                uri: 'http://122.116.23.30:3346/#/login'
-                              }
-                            ]
-                          }
-                        },
-                        { type: "text", text: `帳務資訊：\n客戶代號：${JSON.stringify(resData.cus_code)}\n客戶名稱：${JSON.stringify(resData.cus_name)}\n目前餘額：${JSON.stringify(resData.month_balance)}\n最後更新時間：${JSON.stringify(resData.dateTime)} `},
-                      ];
-              
-                    // 發送訊息
-                    await req.reply(messages);
-
-                    console.log(profile);  // 印出 profile 資訊
-              
-                  } catch (error) {
-                    console.error('Error:', error);  // 捕捉錯誤並打印
-                    req.reply('發生錯誤，請稍後再試。');
-                  }
+        linemessage:async (req, res)  => {{
+             
+            // 確認收到的訊息是否為 "綁定"
+             if (req.message.type === 'text' && req.message.text === '帳務資訊') {
+              try {
+                // 若訊息為 "綁定"，取得用戶的 profile
+                const profile = await req.source.profile();  // 取得 profile
+                const ID = profile.userId;
+                const url=`http://122.116.23.30:3347/basic-info/AccessControl?userId=${ID}`
+                let messages = [];
+                let response;
+                try {
+                const postdata={
+                    memberLineId:ID
                 }
+                response = await axios.post('http://122.116.23.30:3347/link/balance',postdata);
+                } catch (apiError) {
+                console.error('API 查詢餘額發生錯誤:', apiError);
+                }
+
+                if (response && response.status === 200 && response.data.returnCode === 0) {
+                // API 回傳成功，提取客戶資料
+                const resData = response.data.data[0]; 
+                messages = [
+                    {
+                    type: "text",
+                    text: `帳務資訊：\n客戶代號：${resData.cus_code}\n客戶名稱：${resData.cus_name}\n目前餘額：${resData.month_balance}\n最後更新時間：\n${resData.dateTime}`,
+                    },
+                    {
+                    type: "template",
+                    altText: "點擊此連結進行帳務資訊查詢",
+                    template: {
+                        type: "buttons",
+                        text: `Hello ${profile.displayName}，點擊下方按鈕選擇功能：`,
+                        actions: [
+                        {
+                            type: "uri",
+                            label: "綁定帳號",
+                            uri: url
+                        },
+                        {
+                            type: "uri",
+                            label: "帳務查詢網站",
+                            uri: 'http://122.116.23.30:3346/#/login'
+                        }
+                        ]
+                    }
+                    },
+                ];
+                } else {
+                // 查詢失敗或未綁定帳號
+                messages = [
+                    { type: "text", text: "請先綁定帳號，才能進行帳務資訊查詢。" },
+                    {
+                    type: "template",
+                    altText: "點擊此連結進行帳務資訊查詢",
+                    template: {
+                        type: "buttons",
+                        text: `Hello ${profile.displayName}，點擊下方按鈕選擇功能：`,
+                        actions: [
+                        {
+                            type: "uri",
+                            label: "綁定帳號",
+                            uri: url
+                        },
+                        {
+                            type: "uri",
+                            label: "帳務查詢網站",
+                            uri: 'http://122.116.23.30:3346/#/login'
+                        }
+                        ]
+                    }
+                    },
+                ];
+                }
+                
+                await req.reply(messages);//發送
+                console.log(profile);  // 印出 profile 資訊
+          
+              } catch (error) {
+                console.error('Error:', error);  // 捕捉錯誤並打印
+                req.reply('發生錯誤，請稍後再試。');
+              }
             }
-        }
+          }
+    }
 
     }
 }
