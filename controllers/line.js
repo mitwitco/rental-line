@@ -53,7 +53,7 @@ module.exports = ({ sequelize }) => {
                     altText: "點擊此連結進行帳務資訊查詢",
                     template: {
                         type: "buttons",
-                        text: `${profile.displayName}您好！\n感謝您將本帳號加入好友!\n請您點選下方按鈕做客戶綁定\n此官方帳號\n將定期發放最新資訊給您\n敬請期待!`,
+                        text: `${profile.displayName}您好！\n感謝您支持鉅泰創新中油車隊卡\n請您點選下方按鈕做綁定帳號\n如尚未簽約，請先發訊息給小幫手作協助\n祝您行車順利，業績長紅！`,
                         actions: [
                             {
                                 type: "uri",
