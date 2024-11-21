@@ -112,6 +112,50 @@ module.exports = ({ sequelize }) => {
                 return { returnCode: 500, message: "系統錯誤", err: err }
             }
         },
+        linemessage:async (req, res)  => {{
+             
+                // 確認收到的訊息是否為 "綁定"
+                 if (req.message.type === 'text' && req.message.text === '帳務資訊') {
+                  try {
+                    // 若訊息為 "綁定"，取得用戶的 profile
+                    const profile = await req.source.profile();  // 取得 profile
+                    const ID = profile.userId;
+                    const url=`http://122.116.23.30:3347/basic-info/AccessControl?userId=${ID}`
+                   
+                    const messages = [
+                        {
+                          type: "template",
+                          altText: "點擊此連結進行帳務資訊查詢",
+                          template: {
+                            type: "buttons",
+                            text: `Hello ${profile.displayName}，點擊下方按鈕選擇功能：`,
+                            actions: [
+                              {
+                                type: "uri",
+                                label: "綁定帳號",
+                                uri: url
+                              },
+                              {
+                                type: "uri",
+                                label: "帳務查詢網站",
+                                uri: 'http://122.116.23.30:3346/#/login'
+                              }
+                            ]
+                          }
+                        }
+                      ];
+              
+                    // 發送訊息
+                    await req.reply(messages);
+                    console.log(profile);  // 印出 profile 資訊
+              
+                  } catch (error) {
+                    console.error('Error:', error);  // 捕捉錯誤並打印
+                    req.reply('發生錯誤，請稍後再試。');
+                  }
+                }
+              }
+        }
 
     }
 }
