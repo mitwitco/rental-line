@@ -19,11 +19,18 @@ bot.on('follow', Controllers.line.linejoin);
 bot.on('unfollow', Controllers.line.lineUnjoin);
 //JASON
 bot.on('message',Controllers.line.linemessage );
-// const message = {
-//     type: 'text',
-//     text: 'Hello! This is a test message from your LINE bot.',
-//   };
-// bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', message)
+const message2 = {
+    type: 'text',
+    text: 'Hello! This is a test message from your LINE bot.',
+  };
+try {
+    await bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', message2);
+    console.log('Message pushed successfully!');
+  } catch (error) {
+    console.error('Error pushing message:', error);
+  }
+
+
 
 // const job = new CronJob('*/1 * * * *', async () => {
     
