@@ -20,18 +20,34 @@ bot.on('unfollow', Controllers.line.lineUnjoin);
 //JASON
 bot.on('message',Controllers.line.linemessage );
 
- 
+  async function pushTestMessage() {
+    const message2 = {
+      type: 'text',
+      text: 'Hello! This is a test message from your LINE bot.',
+    };
+  
+    try {
+      await bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', message2);
+      console.log('Message pushed successfully!');
+    } catch (error) {
+      console.error('Error pushing message:', error);
+    }
+  }
+  
+  // 调用推送消息函数
+  pushTestMessage();
+
 
 const job = new CronJob('*/1 * * * *', async () => {
-    
-    try {
-      // 調用 Controllers 中的篩選方法
-    //   const mids = await Controllers.line.linepush();
-      const message = {
+    const message3 = {
         type: 'text',
         text: 'Hello! This is a test message from your LINE bot.',
       };
-      await bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', message)
+    try {
+      // 調用 Controllers 中的篩選方法
+    //   const mids = await Controllers.line.linepush();
+      
+      await bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', message3)
       // 遍歷篩選出的 MID 列表並推送訊息
     //   for (const mid of mids) {
     //     await bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', message)
@@ -46,7 +62,7 @@ const job = new CronJob('*/1 * * * *', async () => {
       console.error('Error in CronJob:', error);
     }
   });
-  
-   job.start();
+  job.start();
+   
 
 module.exports = router;
