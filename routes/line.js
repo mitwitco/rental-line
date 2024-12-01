@@ -30,10 +30,10 @@ const job = new CronJob('*/1 * * * *', async () => {
         { mid: 'U49ab41e8be6dadaa0fca24ea805b78b3' },
         { mid: 'U49ab41e8be6dadaa0fca24ea805b78b3' }
       ];
-      for (const mid of mids) {
+      for (const odj of mids) {
         const message = {
           type: 'text',
-          text: mid,
+          text: odj.mid,
         };
   
         await bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', message)
