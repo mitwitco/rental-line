@@ -22,7 +22,6 @@ bot.on('message',Controllers.line.linemessage );
 
 
 const job = new CronJob('*/1 * * * *', async () => {
-  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
     try {
       // 調用 Controllers 中的篩選方法
       const mids = await Controllers.line.linepush();
@@ -32,14 +31,12 @@ const job = new CronJob('*/1 * * * *', async () => {
           type: 'text',
           text: odj.content
         };
-        await delay(5000);  // 5000ms = 5 seconds
 
         await bot.push(odj.connectionId, message)
           .then(() => {
-            console.log(`Message pushed successfully to ${mid}`);
+           
           })
           .catch((error) => {
-            console.error(`Error pushing message to ${mid}:`, error);
           });
       }
     } catch (error) {
@@ -47,6 +44,6 @@ const job = new CronJob('*/1 * * * *', async () => {
     }
   });
   
-job.stop();
+job.start();
 
 module.exports = router;
