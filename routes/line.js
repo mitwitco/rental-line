@@ -2,7 +2,7 @@ const express = require('express')
 const router = require('express').Router()
 const linebot = require('linebot')
 const Controllers = require('../controllers')
-// const { CronJob } = require('cron');
+const { CronJob } = require('cron');
 
 // 鉅泰
 const bot = linebot({
@@ -20,49 +20,33 @@ bot.on('unfollow', Controllers.line.lineUnjoin);
 //JASON
 bot.on('message',Controllers.line.linemessage );
 
-  async function pushTestMessage() {
-    const message2 = {
-      type: 'text',
-      text: 'Hello! This is a test message from your LINE bot.',
-    };
-  
-    try {
-      await bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', message2);
-      console.log('Message pushed successfully!');
-    } catch (error) {
-      console.error('Error pushing message:', error);
-    }
-  }
-  
-  // 调用推送消息函数
-  pushTestMessage();
+ 
 
-
-// const job = new CronJob('*/1 * * * *', async () => {
+const job = new CronJob('*/1 * * * *', async () => {
     
-//     try {
-//       // 調用 Controllers 中的篩選方法
-//       const mids = await Controllers.line.linepush();
-//       const message = {
-//         type: 'text',
-//         text: 'Hello! This is a test message from your LINE bot.',
-//       };
-//       await bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', mids)
-//       // 遍歷篩選出的 MID 列表並推送訊息
-//       for (const mid of mids) {
-//         await bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', mids)
-//           .then(() => {
-//             console.log(`Message pushed successfully to ${mid}`);
-//           })
-//           .catch((error) => {
-//             console.error(`Error pushing message to ${mid}:`, error);
-//           });
-//       }
-//     } catch (error) {
-//       console.error('Error in CronJob:', error);
-//     }
-//   });
+    try {
+      // 調用 Controllers 中的篩選方法
+    //   const mids = await Controllers.line.linepush();
+      const message = {
+        type: 'text',
+        text: 'Hello! This is a test message from your LINE bot.',
+      };
+      await bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', message)
+      // 遍歷篩選出的 MID 列表並推送訊息
+    //   for (const mid of mids) {
+    //     await bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', message)
+    //       .then(() => {
+    //         console.log(`Message pushed successfully to ${mid}`);
+    //       })
+    //       .catch((error) => {
+    //         console.error(`Error pushing message to ${mid}:`, error);
+    //       });
+    //   }
+    } catch (error) {
+      console.error('Error in CronJob:', error);
+    }
+  });
   
-   //job.start();
+   job.start();
 
 module.exports = router;
