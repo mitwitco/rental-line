@@ -28,7 +28,7 @@ const job = new CronJob('*/1 * * * *', async () => {
     //   const mids = await Controllers.line.linepush();
       const mids =  [
         { mid: 'U49ab41e8be6dadaa0fca24ea805b78b3' },
-        { mid: 'U49ab41e8be6dadaa0fca24ea805b78b3' }
+        { mid: 'U49ab41e8be6dadaa0fca24ea805b78b4' }
       ];
       for (const odj of mids) {
         const message = {
