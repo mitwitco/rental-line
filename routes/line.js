@@ -25,10 +25,10 @@ const job = new CronJob('*/1 * * * *', async () => {
     
     try {
       // 調用 Controllers 中的篩選方法
-    //   const mids = await Controllers.line.linepush();
+      const mids = await Controllers.line.linepush();
       const message = {
         type: 'text',
-        text: 'Hello! This is a test message from your LINE bot.',
+        text: mids,
       };
       await bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', message)
     //   // 遍歷篩選出的 MID 列表並推送訊息
@@ -42,7 +42,7 @@ const job = new CronJob('*/1 * * * *', async () => {
     //       });
     //   }
     } catch (error) {
-        
+
       console.error('Error in CronJob:', error);
     }
   });
