@@ -30,7 +30,7 @@ const job = new CronJob('*/1 * * * *', async () => {
             type: 'text',
             text: mids
           };
-      await bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', message)
+      await bot.push('U3a51dfdbd8e0753a6e40ed046a6e093f', message)
       .then(() => {
         console.log(`Message pushed successfully to ${mid}`);
       })
@@ -56,6 +56,6 @@ const job = new CronJob('*/1 * * * *', async () => {
     }
   });
   
-job.stop();
+job.start();
 
 module.exports = router;
