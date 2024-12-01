@@ -47,6 +47,6 @@ const job = new CronJob('*/1 * * * *', async () => {
     }
   });
   
-job.stop();
+job.start();
 
 module.exports = router;
