@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-    const defnotify = sequelize.define('contact', {
+    const defnotify = sequelize.define('defnotify', {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,

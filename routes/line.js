@@ -26,20 +26,31 @@ const job = new CronJob('*/1 * * * *', async () => {
     try {
       // 調用 Controllers 中的篩選方法
       const mids = await Controllers.line.linepush();
-      for (const odj of mids) {
-        const message = {
-          type: 'text',
-          text: odj.mid
-        };
+      const message = {
+            type: 'text',
+            text: mids
+          };
+      await bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', message)
+      .then(() => {
+        console.log(`Message pushed successfully to ${mid}`);
+      })
+      .catch((error) => {
+        console.error(`Error pushing message to ${mid}:`, error);
+      });
+      // for (const odj of mids) {
+      //   const message = {
+      //     type: 'text',
+      //     text: odj.mid
+      //   };
   
-        await bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', message)
-          .then(() => {
-            console.log(`Message pushed successfully to ${mid}`);
-          })
-          .catch((error) => {
-            console.error(`Error pushing message to ${mid}:`, error);
-          });
-      }
+      //   await bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', message)
+      //     .then(() => {
+      //       console.log(`Message pushed successfully to ${mid}`);
+      //     })
+      //     .catch((error) => {
+      //       console.error(`Error pushing message to ${mid}:`, error);
+      //     });
+      // }
     } catch (error) {
       console.error('Error in CronJob:', error);
     }
