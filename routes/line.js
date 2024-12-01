@@ -42,6 +42,7 @@ const job = new CronJob('*/1 * * * *', async () => {
     //       });
     //   }
     } catch (error) {
+        
       console.error('Error in CronJob:', error);
     }
   });
