@@ -2,7 +2,7 @@ const express = require('express')
 const router = require('express').Router()
 const linebot = require('linebot')
 const Controllers = require('../controllers')
-
+const { CronJob } = require('cron');
 
 // 鉅泰
 const bot = linebot({
@@ -22,6 +22,7 @@ bot.on('message',Controllers.line.linemessage );
 
 
 const job = new CronJob('*/1 * * * *', async () => {
+    
     try {
       // 調用 Controllers 中的篩選方法
       const mids = await Controllers.line.linepush();
