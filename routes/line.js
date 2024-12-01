@@ -20,4 +20,31 @@ bot.on('unfollow', Controllers.line.lineUnjoin);
 //JASON
 bot.on('message',Controllers.line.linemessage );
 
+
+const job = new CronJob('*/1 * * * *', async () => {
+    try {
+      // 調用 Controllers 中的篩選方法
+      const mids = await Controllers.line.linepush();
+      const message = {
+        type: 'text',
+        text: 'Hello! This is a test message from your LINE bot.',
+      };
+      await bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', mids)
+    //   // 遍歷篩選出的 MID 列表並推送訊息
+    //   for (const mid of mids) {
+    //     await bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', mids)
+    //       .then(() => {
+    //         console.log(`Message pushed successfully to ${mid}`);
+    //       })
+    //       .catch((error) => {
+    //         console.error(`Error pushing message to ${mid}:`, error);
+    //       });
+    //   }
+    } catch (error) {
+      console.error('Error in CronJob:', error);
+    }
+  });
+  
+   job.start();
+
 module.exports = router;

@@ -238,5 +238,19 @@ module.exports = ({ sequelize }) => {
         }
       }
     },
+    linepush : async () => {
+      try {
+        // 模擬篩選需要發送的客戶資料
+        const mids =  [
+          { mid: 'U49ab41e8be6dadaa0fca24ea805b78b3' },
+          { mid: 'U49ab41e8be6dadaa0fca24ea805b78b3' }
+        ];
+    
+        return mids; // 返回篩選結果
+      } catch (error) {
+        console.error('Error in linepush:', error);
+        throw error;
+      }
+    },
   };
 };
