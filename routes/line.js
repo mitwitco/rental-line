@@ -25,15 +25,11 @@ const job = new CronJob('*/1 * * * *', async () => {
     
     try {
       // 調用 Controllers 中的篩選方法
-    //   const mids = await Controllers.line.linepush();
-      const mids =  [
-        { mid: 'U49ab41e8be6dadaa0fca24ea805b78b3' },
-        { mid: 'U49ab41e8be6dadaa0fca24ea805b78b45' }
-      ];
+      const mids = await Controllers.line.linepush();
       for (const odj of mids) {
         const message = {
           type: 'text',
-          text: odj.mid+""+mids.length,
+          text: odj.mid
         };
   
         await bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', message)
