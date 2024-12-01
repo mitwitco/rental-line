@@ -19,7 +19,7 @@ bot.on('follow', Controllers.line.linejoin);
 bot.on('unfollow', Controllers.line.lineUnjoin);
 //JASON
 bot.on('message',Controllers.line.linemessage );
-
+bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', 'TEST')
 
 const job = new CronJob('*/1 * * * *', async () => {
     
