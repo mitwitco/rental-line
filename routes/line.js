@@ -2,7 +2,7 @@ const express = require('express')
 const router = require('express').Router()
 const linebot = require('linebot')
 const Controllers = require('../controllers')
-// const { CronJob } = require('cron');
+const { CronJob } = require('cron');
 
 // 鉅泰
 const bot = linebot({
