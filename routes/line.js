@@ -2,7 +2,7 @@ const express = require('express')
 const router = require('express').Router()
 const linebot = require('linebot')
 const Controllers = require('../controllers')
-const { CronJob } = require('cron');
+// const { CronJob } = require('cron');
 
 // 鉅泰
 const bot = linebot({
@@ -19,11 +19,11 @@ bot.on('follow', Controllers.line.linejoin);
 bot.on('unfollow', Controllers.line.lineUnjoin);
 //JASON
 bot.on('message',Controllers.line.linemessage );
-const message = {
-    type: 'text',
-    text: 'Hello! This is a test message from your LINE bot.',
-  };
-bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', message)
+// const message = {
+//     type: 'text',
+//     text: 'Hello! This is a test message from your LINE bot.',
+//   };
+// bot.push('U49ab41e8be6dadaa0fca24ea805b78b3', message)
 
 // const job = new CronJob('*/1 * * * *', async () => {
     
