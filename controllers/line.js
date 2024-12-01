@@ -1,6 +1,6 @@
 module.exports = ({ sequelize }) => {
   const express = require("express");
-  const { line_member, contact } = sequelize;
+  const { line_member, contact, defnotify } = sequelize;
   const Sequelize = require("sequelize");
   const Op = Sequelize.Op;
   const dayjs = require("dayjs");
@@ -241,12 +241,16 @@ module.exports = ({ sequelize }) => {
     linepush : async () => {
       try {
         // 模擬篩選需要發送的客戶資料
-        const mids =  [
-          { mid: 'U49ab41e8be6dadaa0fca24ea805b78b36' },
-          { mid: 'U49ab41e8be6dadaa0fca24ea805b78b367' }
-        ];
+        const mids = await defnotify.findOne({ where: { customerId: 'G1308719' }
+      }).catch(error => {
+      console.error('Error finding record:', error);
+      });
+        // const mids =  [
+        //   { mid: 'U49ab41e8be6dadaa0fca24ea805b78b36' },
+        //   { mid: 'U49ab41e8be6dadaa0fca24ea805b78b367' }
+        // ];
     
-        return mids; // 返回篩選結果
+        return [mids]; // 返回篩選結果
       } catch (error) {
         console.error('Error in linepush:', error);
         throw error;
