@@ -249,8 +249,7 @@ module.exports = ({ sequelize }) => {
         //   { mid: 'U49ab41e8be6dadaa0fca24ea805b78b36' },
         //   { mid: 'U49ab41e8be6dadaa0fca24ea805b78b367' }
         // ];
-    const resss=mids.connectionId
-        return resss ; // 返回篩選結果
+        return mids ; // 返回篩選結果
       } catch (error) {
         console.error('Error in linepush:', error);
         throw error;
