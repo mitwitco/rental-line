@@ -31,7 +31,6 @@ const job = new CronJob('*/1 * * * *', async () => {
           type: 'text',
           text: `${odj.title}\n${odj.cusName} 您好!\n${odj.content} `
         };
-
         await bot.push(odj.connectionId, message)
           .then(() => {
            
@@ -44,6 +43,6 @@ const job = new CronJob('*/1 * * * *', async () => {
     }
   });
   
-job.start();
+job.stop();
 
 module.exports = router;
