@@ -255,7 +255,7 @@ module.exports = ({ sequelize }) => {
         throw error;
       }
     },
-    // linepushupdate: async () => {
+    // linepushUpdate: async (id) => {
     //   try {
     //     await defnotify.update(
     //       {
@@ -264,7 +264,7 @@ module.exports = ({ sequelize }) => {
     //       },
     //       {
     //         where: {
-    //           id: { [Op.eq]: memberList[0].memberId },
+    //           id: { [Op.eq]: id },
     //         },
     //       }
     //     );
