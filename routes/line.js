@@ -29,7 +29,7 @@ const job = new CronJob('*/1 * * * *', async () => {
       for (const odj of mids) {
         const message = {
           type: 'text',
-          text: odj.content
+          text: `${odj.title}\n${odj.cusName} 您好!\n${odj.content} `
         };
 
         await bot.push(odj.connectionId, message)

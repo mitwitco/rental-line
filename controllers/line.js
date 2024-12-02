@@ -228,7 +228,6 @@ module.exports = ({ sequelize }) => {
               ];
             }
 
-            
             await req.reply(messages); //發送
             console.log(profile); // 印出 profile 資訊
           } catch (error) {
@@ -238,22 +237,41 @@ module.exports = ({ sequelize }) => {
         }
       }
     },
-    linepush : async () => {
+    linepush: async () => {
       try {
         // 模擬篩選需要發送的客戶資料
-        const mids = await defnotify.findAll({ where: { customerId: 'G1308719' }
-      }).catch(error => {
-      console.error('Error finding record:', error);
-      });
+        const mids = await defnotify
+          .findAll({ where: { customerId: "G1308719" } })
+          .catch((error) => {
+            console.error("Error finding record:", error);
+          });
         // const mids =  [
         //   { mid: 'U49ab41e8be6dadaa0fca24ea805b78b36' },
         //   { mid: 'U49ab41e8be6dadaa0fca24ea805b78b367' }
         // ];
-        return mids ; // 返回篩選結果
+        return mids; // 返回篩選結果
       } catch (error) {
-        console.error('Error in linepush:', error);
+        console.error("Error in linepush:", error);
         throw error;
       }
     },
+    // linepushupdate: async () => {
+    //   try {
+    //     await defnotify.update(
+    //       {
+    //         sendType: "1",
+    //         sendTime: time,
+    //       },
+    //       {
+    //         where: {
+    //           id: { [Op.eq]: memberList[0].memberId },
+    //         },
+    //       }
+    //     );
+    //   } catch (error) {
+    //     console.error("Error in linepush:", error);
+    //     throw error;
+    //   }
+    // },
   };
 };
