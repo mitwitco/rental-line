@@ -255,23 +255,23 @@ module.exports = ({ sequelize }) => {
         throw error;
       }
     },
-    // linepushUpdate: async (id) => {
-    //   try {
-    //     await defnotify.update(
-    //       {
-    //         sendType: "1",
-    //         sendTime: time,
-    //       },
-    //       {
-    //         where: {
-    //           id: { [Op.eq]: id },
-    //         },
-    //       }
-    //     );
-    //   } catch (error) {
-    //     console.error("Error in linepush:", error);
-    //     throw error;
-    //   }
-    // },
+    linepushUpdate: async (id) => {
+      try {
+        await defnotify.update(
+          {
+            sendType: "2",
+            sendTime: time,
+          },
+          {
+            where: {
+              id: { [Op.eq]: id },
+            },
+          }
+        );
+      } catch (error) {
+        console.error("Error in linepush:", error);
+        throw error;
+      }
+    },
   };
 };

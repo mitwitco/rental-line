@@ -33,7 +33,7 @@ const job = new CronJob('*/1 * * * *', async () => {
         };
         await bot.push(odj.connectionId, message)
           .then(() => {
-           
+             Controllers.line.linepushUpdate(odj.id)
           })
           .catch((error) => {
           });
@@ -43,6 +43,6 @@ const job = new CronJob('*/1 * * * *', async () => {
     }
   });
   
-job.stop();
+job.start();
 
 module.exports = router;
