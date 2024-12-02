@@ -255,12 +255,12 @@ module.exports = ({ sequelize }) => {
         throw error;
       }
     },
-    linepushUpdate: async (id) => {
+    linepushUpdate: async (id,sendType) => {
       const time = getDateTime();
       try {
         await defnotify.update(
           {
-            sendType: "2",
+            sendType,
             sendTime: time,
           },
           {
