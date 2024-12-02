@@ -241,7 +241,7 @@ module.exports = ({ sequelize }) => {
       try {
         // 模擬篩選需要發送的客戶資料
         const mids = await defnotify
-          .findAll({ where: { customerId: "G1308719" } })
+          .findAll({ where: { customerId: "G1308719" , sendType: "1" }})
           .catch((error) => {
             console.error("Error finding record:", error);
           });
@@ -256,6 +256,7 @@ module.exports = ({ sequelize }) => {
       }
     },
     linepushUpdate: async (id) => {
+      const time = getDateTime();
       try {
         await defnotify.update(
           {
