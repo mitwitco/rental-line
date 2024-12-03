@@ -237,11 +237,44 @@ module.exports = ({ sequelize }) => {
         }
       }
     },
+    linepushBot: async (bot) => {
+      try {
+        // 調用 Controllers 中的篩選方法
+        const mids = await linepush();
+
+        for (const odj of mids) {
+          const message = {
+            type: "text",
+            text: `${odj.title}\n${odj.cusName} 您好!\n${odj.content} `,
+          };
+          try {
+            await bot.push(odj.connectionId, message); // 推送訊息
+            await Controllers.line.linepushUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
+            console.log(`Message successfully pushed to ${odj.connectionId}`);
+          } catch (error) {
+            console.error(
+              `Error pushing message to ${odj.connectionId}:`,
+              error
+            );
+            try {
+              await Controllers.line.linepushUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+            } catch (updateError) {
+              console.error(
+                `Error updating sendType to "3" for id ${odj.id}:`,
+                updateError
+              );
+            }
+          }
+        }
+      } catch (error) {
+        console.error("Error in CronJob:", error);
+      }
+    },
     linepush: async () => {
       try {
         // 模擬篩選需要發送的客戶資料
         const mids = await defnotify
-          .findAll({ where: { customerId: "G1308719" , sendType: "1" }})
+          .findAll({ where: { customerId: "G1308719", sendType: "1" } })
           .catch((error) => {
             console.error("Error finding record:", error);
           });
@@ -255,7 +288,7 @@ module.exports = ({ sequelize }) => {
         throw error;
       }
     },
-    linepushUpdate: async (id,sendType) => {
+    linepushUpdate: async (id, sendType) => {
       const time = getDateTime();
       try {
         await defnotify.update(
