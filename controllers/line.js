@@ -249,7 +249,7 @@ module.exports = ({ sequelize }) => {
           };
           try {
             await bot.push(odj.connectionId, message); // 推送訊息
-            await Controllers.line.linepushUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
+            await linepushUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
             console.log(`Message successfully pushed to ${odj.connectionId}`);
           } catch (error) {
             console.error(
@@ -257,7 +257,7 @@ module.exports = ({ sequelize }) => {
               error
             );
             try {
-              await Controllers.line.linepushUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+              await linepushUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
             } catch (updateError) {
               console.error(
                 `Error updating sendType to "3" for id ${odj.id}:`,
