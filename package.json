@@ -18,6 +18,7 @@
     "fs": "^0.0.1-security",
     "linebot": "^1.6.1",
     "mysql2": "^3.11.4",
+    "nodemailer": "^6.9.16",
     "sequelize": "^6.37.5"
   }
 }

@@ -18,7 +18,59 @@ module.exports = ({ sequelize }) => {
     let dateTime = taiwanTime.format(timeFormat);
     return dateTime;
   };
+  const Modselect = async (sendMod) => {
+    try {
+      // 模擬篩選需要發送的客戶資料
+      let mids;
+      // const mids =  [
+      //   { mid: 'U49ab41e8be6dadaa0fca24ea805b78b36' },
+      //   { mid: 'U49ab41e8be6dadaa0fca24ea805b78b367' }
+      // ];
+      if (sendMod == "1") {
+        mids = await defnotify
+          .findAll({ where: { customerId:"G1308719",sendMod: "1", sendType: "5" } })
+          .catch((error) => {
+            console.error("Error finding record:", error);
+          });
+      } else if (sendMod == "2") {
+        mids = await defnotify
+          .findAll({ where: { customerId:"G1308719",sendMod: "2", sendType: "5" } })
+          .catch((error) => {
+            console.error("Error finding record:", error);
+          });
+      } else if (sendMod == "3") {
+        mids = await defnotify
+          .findAll({ where: { customerId:"G1308719",sendMod: "3", sendType: "5" } })
+          .catch((error) => {
+            console.error("Error finding record:", error);
+          });
+      }
 
+      return mids; // 返回篩選結果
+    } catch (error) {
+      console.error("Error in linepush:", error);
+      throw error;
+    }
+  };
+  const MesUpdate = async (id, sendType) => {
+    const time = getDateTime();
+    try {
+      await defnotify.update(
+        {
+          sendType,
+          sendTime: time,
+        },
+        {
+          where: {
+            id: { [Op.eq]: id },
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error in linepush:", error);
+      throw error;
+    }
+  };
   return {
     // 處理 LINE 加好友事件
     linejoin: async (req, res) => {
@@ -237,74 +289,82 @@ module.exports = ({ sequelize }) => {
         }
       }
     },
-    linepushBot: async (bot) => {
+    phoneCron: async () => {
       try {
-        // 調用 Controllers 中的篩選方法
-        const mids = await linepush();
-
-        for (const odj of mids) {
-          const message = {
-            type: "text",
-            text: `${odj.title}\n${odj.cusName} 您好!\n${odj.content} `,
-          };
-          try {
-            await bot.push(odj.connectionId, message); // 推送訊息
-            await linepushUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
-            console.log(`Message successfully pushed to ${odj.connectionId}`);
-          } catch (error) {
-            console.error(
-              `Error pushing message to ${odj.connectionId}:`,
-              error
-            );
-            try {
-              await linepushUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
-            } catch (updateError) {
-              console.error(
-                `Error updating sendType to "3" for id ${odj.id}:`,
-                updateError
-              );
-            }
-          }
-        }
+        const mids = await Modselect("1"); //1為手機簡訊
+        console.log("手機簡訊需發送筆數：" + mids.length);
+        // for (const odj of mids) {
+        //   const message = {
+        //     type: "text",
+        //     text: `${odj.title}\n${odj.cusName} 您好!\n${odj.content} `,
+        //   };
+        //   try {
+        //     await bot.push(odj.connectionId, message); // 推送訊息
+        //     await MesUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
+        //     console.log(`Message successfully pushed to ${odj.connectionId}`);
+        //   } catch (error) {
+        //     await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+        //     console.error(
+        //       `Error pushing message to ${odj.connectionId}:`,
+        //       error
+        //     )
+        //   }
+        // }
       } catch (error) {
         console.error("Error in CronJob:", error);
       }
     },
-    linepush: async () => {
+    linepushCron: async (bot) => {
       try {
-        // 模擬篩選需要發送的客戶資料
-        const mids = await defnotify
-          .findAll({ where: { customerId: "G1308719", sendType: "1" } })
-          .catch((error) => {
-            console.error("Error finding record:", error);
-          });
-        // const mids =  [
-        //   { mid: 'U49ab41e8be6dadaa0fca24ea805b78b36' },
-        //   { mid: 'U49ab41e8be6dadaa0fca24ea805b78b367' }
-        // ];
-        return mids; // 返回篩選結果
+        // 調用 Controllers 中的篩選方法
+        const mids = await Modselect("2"); //2為Line
+        console.log("Line需發送筆數：" + mids.length);
+        // for (const odj of mids) {
+        //   const message = {
+        //     type: "text",
+        //     text: `${odj.title}\n${odj.cusName} 您好!\n${odj.content} `,
+        //   };
+        //   try {
+        //     await bot.push(odj.connectionId, message); // 推送訊息
+        //     await MesUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
+        //     console.log(`Message successfully pushed to ${odj.connectionId}`);
+        //   } catch (error) {
+        //     await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+        //     console.error(
+        //       `Error pushing message to ${odj.connectionId}:`,
+        //       error
+        //     )
+        //   }
+        // }
       } catch (error) {
-        console.error("Error in linepush:", error);
-        throw error;
+        await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+        console.error("Error in CronJob:", error);
       }
     },
-    linepushUpdate: async (id, sendType) => {
-      const time = getDateTime();
+    mailCron: async (transporter) => {
       try {
-        await defnotify.update(
-          {
-            sendType,
-            sendTime: time,
-          },
-          {
-            where: {
-              id: { [Op.eq]: id },
-            },
-          }
-        );
+        const mids = await Modselect("3"); //3為mail
+        console.log("Mail需發送筆數：" + mids.length);
+        // for (const odj of mids) {
+        //   const mailOptions = {
+        //     from: '鉅泰創新股份有限公司<eric@jutai.net>',
+        //     to:odj.connectionId, // 或從 req.body 取得
+        //     subject:odj.title,
+        //     html:`${odj.cusName} 您好!\n${odj.content}`,
+        //   };
+        //   try {
+        //     // 發送信件並等待結果
+        //     const info = await transporter.sendMail(mailOptions);
+        //     await MesUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
+        //     console.log('郵件發送成功:', info);
+        //   } catch (error) {
+        //     await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+        //     console.error('郵件發送失敗:', error);
+        //   }
+        // }
       } catch (error) {
-        console.error("Error in linepush:", error);
-        throw error;
+        await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+        console.error("Error in CronJob:", error);
       }
     },
   };

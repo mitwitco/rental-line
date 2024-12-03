@@ -3,8 +3,17 @@ const router = require('express').Router()
 const linebot = require('linebot')
 const Controllers = require('../controllers')
 const { CronJob } = require('cron');
+const nodemailer = require('nodemailer');
 
 // 鉅泰
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  auth: {
+    user: 'eric@jutai.net',
+    pass: 'umwzuohkofvjgkuy',
+  },
+});
 const bot = linebot({
     channelId: '2006499890',
     channelSecret: 'e6b1723c95864e023cd4f00401a67dd5',
@@ -20,10 +29,19 @@ bot.on('unfollow', Controllers.line.lineUnjoin);
 //JASON
 bot.on('message',Controllers.line.linemessage );
 
-const lineCron = new CronJob('*/1 * * * *', async () => {
-  await Controllers.line.linepushBot(bot); // 呼叫 line.js 中的方法
+const phoneCron = new CronJob('*/1 * * * *', async () => {
+  await Controllers.line.phoneCron(); 
 });
+const lineCron = new CronJob('*/1 * * * *', async () => {
+  await Controllers.line.linepushCron(bot); 
+});
+const mailCron = new CronJob('*/1 * * * *', async () => {
+  await Controllers.line.mailCron(transporter); 
+});
+phoneCron.start();
 lineCron.start();
+mailCron.start();
+
 
 
 
