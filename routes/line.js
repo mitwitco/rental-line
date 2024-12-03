@@ -20,10 +20,10 @@ bot.on('unfollow', Controllers.line.lineUnjoin);
 //JASON
 bot.on('message',Controllers.line.linemessage );
 
-const line = new CronJob('*/1 * * * *', async () => {
+const lineCron = new CronJob('*/1 * * * *', async () => {
   await Controllers.line.linepushBot(bot); // 呼叫 line.js 中的方法
 });
-line.start();
+lineCron.start();
 
 
 
