@@ -18,7 +18,33 @@ module.exports = ({ sequelize }) => {
     let dateTime = taiwanTime.format(timeFormat);
     return dateTime;
   };
-
+  const line = new CronJob('*/1 * * * *', async () => {
+    try {
+      // 調用 Controllers 中的篩選方法
+      const mids = await linepush();
+    
+      for (const odj of mids) {
+        const message = {
+          type: 'text',
+          text: `${odj.title}\n${odj.cusName} 您好!\n${odj.content} `
+        };
+        try {
+          await bot.push(odj.connectionId, message); // 推送訊息
+          await Controllers.line.linepushUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
+          console.log(`Message successfully pushed to ${odj.connectionId}`);
+        } catch (error) {
+          console.error(`Error pushing message to ${odj.connectionId}:`, error);
+          try {
+            await Controllers.line.linepushUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+          } catch (updateError) {
+            console.error(`Error updating sendType to "3" for id ${odj.id}:`, updateError);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('Error in CronJob:', error);
+    }
+  });
   return {
     // 處理 LINE 加好友事件
     linejoin: async (req, res) => {
@@ -274,5 +300,6 @@ module.exports = ({ sequelize }) => {
         throw error;
       }
     },
+    
   };
 };
