@@ -8,7 +8,6 @@ module.exports = ({ sequelize }) => {
   const utc = require("dayjs/plugin/utc");
   const timezone = require("dayjs/plugin/timezone");
 
-
   const getDateTime = (input = null, timeFormat = "YYYY-MM-DD HH:mm:ss") => {
     dayjs.extend(utc);
     dayjs.extend(timezone);
@@ -19,7 +18,7 @@ module.exports = ({ sequelize }) => {
     let dateTime = taiwanTime.format(timeFormat);
     return dateTime;
   };
-  
+
   return {
     // 處理 LINE 加好友事件
     linejoin: async (req, res) => {
@@ -275,6 +274,5 @@ module.exports = ({ sequelize }) => {
         throw error;
       }
     },
-    
   };
 };

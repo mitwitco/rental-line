@@ -19,9 +19,9 @@ bot.on('follow', Controllers.line.linejoin);
 bot.on('unfollow', Controllers.line.lineUnjoin);
 //JASON
 bot.on('message',Controllers.line.linemessage );
-line.start();
 
-const line = new CronJob('*/1 * * * *', async () => {
+
+const job = new CronJob('*/1 * * * *', async () => {
     try {
       // 調用 Controllers 中的篩選方法
       const mids = await Controllers.line.linepush();
@@ -49,6 +49,6 @@ const line = new CronJob('*/1 * * * *', async () => {
     }
   });
   
-
+job.start();
 
 module.exports = router;
