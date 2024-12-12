@@ -7,7 +7,7 @@ module.exports = ({ sequelize }) => {
   const axios = require("axios");
   const utc = require("dayjs/plugin/utc");
   const timezone = require("dayjs/plugin/timezone");
-  const targetCustomerIds = ["G2200233", "G2200195", "G2100002", "G2100001"];
+  const targetCustomerIds = ["G2200233", "G2200195", "G2100002", "G2100001","G1308719"];
   const thousandthsFormat = (value) => {
     value = parseInt(value)
     if(isNaN(value)) return
