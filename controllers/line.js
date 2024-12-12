@@ -307,7 +307,7 @@ module.exports = ({ sequelize }) => {
       try {
         const mids = await Modselect("1"); //1為手機簡訊
         console.log("手機簡訊需發送筆數：" + mids.length);
-        console.log("手機簡訊需發送客戶：" + JSON.stringify(mids[0].customerId));
+        console.log("手機簡訊需發送客戶：" + JSON.stringify(mids.customerId));
       //   for (const odj of mids) {
       //     if (odj.connectionId.length === 10) {
       //       odj.connectionId = '886' + odj.connectionId.slice(1);
@@ -374,7 +374,7 @@ module.exports = ({ sequelize }) => {
         // 調用 Controllers 中的篩選方法
         const mids = await Modselect("2"); //2為Line
         console.log("Line需發送筆數：" + mids.length);
-        console.log("Line需發送客戶：" + JSON.stringify(mids[0].customerId));
+        console.log("Line需發送客戶：" + JSON.stringify(mids.customerId));
         // for (const odj of mids) {
         //   const message = {
         //     type: "text",
@@ -401,7 +401,7 @@ module.exports = ({ sequelize }) => {
       try {
         const mids = await Modselect("3"); //3為mail
         console.log("Mail需發送筆數：" + mids.length);
-        console.log("Mail需發送客戶：" + JSON.stringify(mids[0].customerId));
+        console.log("Mail需發送客戶：" + JSON.stringify(mids.customerId));
         // for (const odj of mids) {
         //   const mailOptions = {
         //     from: '鉅泰創新股份有限公司<invoice@jutai.net>',
