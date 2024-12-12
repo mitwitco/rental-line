@@ -401,7 +401,7 @@ module.exports = ({ sequelize }) => {
       try {
         const mids = await Modselect("3"); //3為mail
         console.log("Mail需發送筆數：" + mids.length);
-        console.log("Mail需發送客戶：" + JSON.stringify(mids.customerId));
+        console.log("Mail需發送客戶：" + JSON.stringify(mids[0].customerId));
         // for (const odj of mids) {
         //   const mailOptions = {
         //     from: '鉅泰創新股份有限公司<invoice@jutai.net>',
