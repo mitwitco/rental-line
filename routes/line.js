@@ -38,9 +38,9 @@ const lineCron = new CronJob('*/15 * * * *', async () => {
 const mailCron = new CronJob('*/15 * * * *', async () => {
   await Controllers.line.mailCron(transporter); 
 });
-phoneCron.start();
-lineCron.start();
-mailCron.start();
+// phoneCron.start();
+// lineCron.start();
+// mailCron.start();
 
 
 
