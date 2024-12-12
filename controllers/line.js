@@ -7,7 +7,12 @@ module.exports = ({ sequelize }) => {
   const axios = require("axios");
   const utc = require("dayjs/plugin/utc");
   const timezone = require("dayjs/plugin/timezone");
-
+  
+  const thousandthsFormat = (value) => {
+    value = parseInt(value)
+    if(isNaN(value)) return
+    return value.toLocaleString()
+  }
   const getDateTime = (input = null, timeFormat = "YYYY-MM-DD HH:mm:ss") => {
     dayjs.extend(utc);
     dayjs.extend(timezone);
@@ -27,20 +32,29 @@ module.exports = ({ sequelize }) => {
       //   { mid: 'U49ab41e8be6dadaa0fca24ea805b78b367' }
       // ];
       if (sendMod == "1") {
+        //手機
         mids = await defnotify
-          .findAll({ where: { customerId:"G1308719",sendMod: "1", sendType: "5" } })
+          .findAll({
+            where: { customerId: "G1308719", sendMod: "1", sendType: "5" },
+          })
           .catch((error) => {
             console.error("Error finding record:", error);
           });
       } else if (sendMod == "2") {
+        //LINE
         mids = await defnotify
-          .findAll({ where: { customerId:"G1308719",sendMod: "2", sendType: "5" } })
+          .findAll({
+            where: { customerId: "G1308719", sendMod: "2", sendType: "5" },
+          })
           .catch((error) => {
             console.error("Error finding record:", error);
           });
       } else if (sendMod == "3") {
+        //MAIL
         mids = await defnotify
-          .findAll({ where: { customerId:"G1308719",sendMod: "3", sendType: "5" } })
+          .findAll({
+            where: { customerId: "G1308719", sendMod: "3", sendType: "5" },
+          })
           .catch((error) => {
             console.error("Error finding record:", error);
           });
@@ -221,7 +235,7 @@ module.exports = ({ sequelize }) => {
               let textMessage = "帳務資訊：\n";
               // 遍歷每筆資料，將資料格式化並串接
               resData.forEach((data, index) => {
-                textMessage += `客戶代號：${data.cus_code}\n客戶名稱：${data.cus_name}\n目前餘額：${data.month_balance}\n最後更新時間：${data.dateTime}\n`;
+                textMessage += `客戶代號：${data.cus_code}\n客戶名稱：${data.cus_name}\n目前餘額：${thousandthsFormat(data.month_balance)}\n最後更新時間：${data.dateTime}\n`;
                 // 在每筆資料之間加上分隔線
                 if (index < resData.length - 1) {
                   textMessage += "--------\n";
@@ -293,24 +307,64 @@ module.exports = ({ sequelize }) => {
       try {
         const mids = await Modselect("1"); //1為手機簡訊
         console.log("手機簡訊需發送筆數：" + mids.length);
-        // for (const odj of mids) {
-        //   const message = {
-        //     type: "text",
-        //     text: `${odj.title}\n${odj.cusName} 您好!\n${odj.content} `,
-        //   };
-        //   try {
-        //     await bot.push(odj.connectionId, message); // 推送訊息
-        //     await MesUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
-        //     console.log(`Message successfully pushed to ${odj.connectionId}`);
-        //   } catch (error) {
-        //     await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
-        //     console.error(
-        //       `Error pushing message to ${odj.connectionId}:`,
-        //       error
-        //     )
-        //   }
-        // }
+      //   for (const odj of mids) {
+      //     if (odj.connectionId.length === 10) {
+      //       odj.connectionId = '886' + odj.connectionId.slice(1);
+      //     }else{
+      //       console.log(odj.connectionId+"號碼錯誤");
+      //       await MesUpdate(odj.id, "4"); // 推送失敗，電話格式不對 更新 sendType 為 "4"
+      //       continue
+      //     }
+      //     let query = `${odj.title}\n${odj.cusName} 您好!\n${odj.content}`;
+      //     // 構建表單數據
+      //     const formData = new URLSearchParams();
+      //     formData.append("username", "42993157");
+      //     formData.append("password", "uu42993157");
+      //     formData.append("dstaddr", odj.connectionId);
+      //     formData.append("smbody", query);
+      //     formData.append("smsPointFlag", "1"); // 假設你要設置這個標誌為 1
+
+      //     try {
+      //       //發送 POST 請求
+      //       const response = await axios.post(
+      //         "https://smsapi.mitake.com.tw/api/mtk/SmSend?CharsetURL=UTF-8",
+      //         formData.toString(),
+      //         {
+      //           headers: {
+      //             "Content-Type": "application/x-www-form-urlencoded",
+      //           },
+      //         }
+      //       );
+      //       const lines = response.data.split("\r\n");
+      //       const result = {};
+      //       lines.forEach((line) => {
+      //         if (line.includes("=")) {
+      //           const [key, value] = line.split("=");
+      //           result[key.trim()] = value.trim();
+      //         }
+      //       });
+      //       console.log(JSON.stringify(result));
+      //       if (result.statuscode >= 0 && result.statuscode <= 4) {
+      //         await MesUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
+      //         console.log(odj.connectionId+"傳送成功！");
+      //         console.log("SMS 消耗點數：", result.smsPoint);
+      //         console.log("剩餘帳號點數：", result.AccountPoint);
+      //       } else {
+
+      //         await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+      //         console.error(odj.connectionId+"傳送失敗！");
+      //         console.log("錯誤代碼：", result.statuscode);
+      //         console.log("剩餘帳號點數：", result.AccountPoint);
+              
+      //       }
+            
+      //     } catch (error) {
+      //       await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+      //       console.error("Error sending SMS:", error);
+      //     }
+      //  }
       } catch (error) {
+        await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
         console.error("Error in CronJob:", error);
       }
     },
@@ -347,10 +401,21 @@ module.exports = ({ sequelize }) => {
         console.log("Mail需發送筆數：" + mids.length);
         // for (const odj of mids) {
         //   const mailOptions = {
-        //     from: '鉅泰創新股份有限公司<eric@jutai.net>',
+        //     from: '鉅泰創新股份有限公司<invoice@jutai.net>',
         //     to:odj.connectionId, // 或從 req.body 取得
         //     subject:odj.title,
         //     html:`${odj.cusName} 您好!\n${odj.content}`,
+        //     // attachments: [
+        //     //   {
+        //     //     filename: 'example.xls', // 附檔名稱
+        //     //     path: 'F:\\G2200783_亞巨葉碧鑾物流有限公司.xls', // 附檔的路徑
+        //     //   },
+        //     //   // 如果需要多個檔案，可以繼續在這裡加入其他附檔
+        //     //   {
+        //     //     filename: 'image.png',
+        //     //     path: './path/to/image.png',
+        //     //   },
+        //     // ],
         //   };
         //   try {
         //     // 發送信件並等待結果
