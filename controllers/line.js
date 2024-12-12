@@ -412,7 +412,7 @@ module.exports = ({ sequelize }) => {
         //   const mailOptions = {
         //     from: '鉅泰創新股份有限公司<invoice@jutai.net>',
         //     to:odj.connectionId, // 或從 req.body 取得
-        //     subject:'鉅泰中油車隊卡餘額通知',
+        //     subject:odj.title,
         //     html:`${odj.cusName} 您好!\n${odj.content}`,
         //     // attachments: [
         //     //   {
