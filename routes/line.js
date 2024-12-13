@@ -29,13 +29,13 @@ bot.on('unfollow', Controllers.line.lineUnjoin);
 //JASON
 bot.on('message',Controllers.line.linemessage );
 
-const phoneCron = new CronJob('*/1 * * * *', async () => {
+const phoneCron = new CronJob('*/10 * * * *', async () => {
   await Controllers.line.phoneCron(); 
 });
-const lineCron = new CronJob('*/1 * * * *', async () => {
+const lineCron = new CronJob('*/10 * * * *', async () => {
   await Controllers.line.linepushCron(bot); 
 });
-const mailCron = new CronJob('*/1 * * * *', async () => {
+const mailCron = new CronJob('*/10 * * * *', async () => {
   await Controllers.line.mailCron(transporter); 
 });
 phoneCron.start();
