@@ -408,33 +408,34 @@ module.exports = ({ sequelize }) => {
         for (const odj of mids) {
           if (targetCustomerIds.includes(odj.customerId)) {
             console.log("要發送" + JSON.stringify(odj.customerId));
+          
+          const mailOptions = {
+            from: '鉅泰創新股份有限公司<invoice@jutai.net>',
+            to:odj.connectionId, // 或從 req.body 取得
+            subject:odj.subject,
+            html:`${odj.cusName} 您好!\n${odj.content}`,
+            // attachments: [
+            //   {
+            //     filename: 'example.xls', // 附檔名稱
+            //     path: 'F:\\G2200783_亞巨葉碧鑾物流有限公司.xls', // 附檔的路徑
+            //   },
+            //   // 如果需要多個檔案，可以繼續在這裡加入其他附檔
+            //   {
+            //     filename: 'image.png',
+            //     path: './path/to/image.png',
+            //   },
+            // ],
+          };
+          try {
+            // 發送信件並等待結果
+            const info = await transporter.sendMail(mailOptions);
+            await MesUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
+            console.log('郵件發送成功:', info);
+          } catch (error) {
+            await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+            console.error('郵件發送失敗:', error);
           }
-        //   const mailOptions = {
-        //     from: '鉅泰創新股份有限公司<invoice@jutai.net>',
-        //     to:odj.connectionId, // 或從 req.body 取得
-        //     subject:odj.subject,
-        //     html:`${odj.cusName} 您好!\n${odj.content}`,
-        //     // attachments: [
-        //     //   {
-        //     //     filename: 'example.xls', // 附檔名稱
-        //     //     path: 'F:\\G2200783_亞巨葉碧鑾物流有限公司.xls', // 附檔的路徑
-        //     //   },
-        //     //   // 如果需要多個檔案，可以繼續在這裡加入其他附檔
-        //     //   {
-        //     //     filename: 'image.png',
-        //     //     path: './path/to/image.png',
-        //     //   },
-        //     // ],
-        //   };
-        //   try {
-        //     // 發送信件並等待結果
-        //     const info = await transporter.sendMail(mailOptions);
-        //     await MesUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
-        //     console.log('郵件發送成功:', info);
-        //   } catch (error) {
-        //     await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
-        //     console.error('郵件發送失敗:', error);
-        //   }
+        }
         }
       } catch (error) {
         await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
