@@ -35,7 +35,7 @@ module.exports = ({ sequelize }) => {
         //手機
         mids = await defnotify
           .findAll({
-            where: {  sendMod: "1", sendType: "5" },
+            where: {  sendMod: "1", sendType: "1" },
           })
           .catch((error) => {
             console.error("Error finding record:", error);
@@ -44,7 +44,7 @@ module.exports = ({ sequelize }) => {
         //LINE
         mids = await defnotify
           .findAll({
-            where: {  sendMod: "2", sendType: "5" },
+            where: {  sendMod: "2", sendType: "1" },
           })
           .catch((error) => {
             console.error("Error finding record:", error);
@@ -53,7 +53,7 @@ module.exports = ({ sequelize }) => {
         //MAIL
         mids = await defnotify
           .findAll({
-            where: {  sendMod: "3", sendType: "5" },
+            where: {  sendMod: "3", sendType: "1" },
           })
           .catch((error) => {
             console.error("Error finding record:", error);
@@ -318,7 +318,7 @@ module.exports = ({ sequelize }) => {
       //       await MesUpdate(odj.id, "4"); // 推送失敗，電話格式不對 更新 sendType 為 "4"
       //       continue
       //     }
-      //     let query = `${odj.title}\n${odj.cusName} 您好!\n${odj.content}`;
+      //     let query = `${odj.cusName} 您好!\n${odj.content}`;
       //     // 構建表單數據
       //     const formData = new URLSearchParams();
       //     formData.append("username", "42993157");
@@ -412,7 +412,7 @@ module.exports = ({ sequelize }) => {
         //   const mailOptions = {
         //     from: '鉅泰創新股份有限公司<invoice@jutai.net>',
         //     to:odj.connectionId, // 或從 req.body 取得
-        //     subject:odj.title,
+        //     subject:odj.subject,
         //     html:`${odj.cusName} 您好!\n${odj.content}`,
         //     // attachments: [
         //     //   {
