@@ -424,7 +424,7 @@ module.exports = ({ sequelize }) => {
               from: "鉅泰創新股份有限公司<invoice@jutai.net>",
               to: odj.connectionId, // 或從 req.body 取得
               subject: odj.subject,
-              html: `${odj.cusName} 您好!\n${odj.content}`,
+              html: `${odj.cusName} 您好!<br>${odj.content.replace(/\n/g, '<br>')}`,
               // attachments: [
               //   {
               //     filename: 'example.xls', // 附檔名稱
