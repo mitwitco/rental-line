@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
         contactId: { type: DataTypes.STRING, notNull: false, },
         sendMod: { type: DataTypes.STRING, notNull: false, },
         title: { type: DataTypes.STRING, notNull: false, },
-        subject: { type: DataTypes.STRING, notNull: false, },
         content: { type: DataTypes.STRING, notNull: false, },
         connectionId: { type: DataTypes.STRING, notNull: false, },
         sendTime: { type: DataTypes.STRING, notNull: false, },
