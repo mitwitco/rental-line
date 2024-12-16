@@ -236,26 +236,153 @@ module.exports = ({ sequelize }) => {
               response.status === 200 &&
               response.data.returnCode === 0
             ) {
-              // API 回傳成功，提取客戶資料
+              // // API 回傳成功，提取客戶資料
+              // const resData = response.data.data;
+              // let textMessage = "帳務資訊：\n";
+              // // 遍歷每筆資料，將資料格式化並串接
+              // resData.forEach((data, index) => {
+              //   textMessage += `客戶代號：${data.cus_code}\n客戶名稱：${
+              //     data.cus_name
+              //   }\n目前餘額：${thousandthsFormat(
+              //     data.month_balance
+              //   )}\n最後更新時間：${data.dateTime}\n`;
+              //   // 在每筆資料之間加上分隔線
+              //   if (index < resData.length - 1) {
+              //     textMessage += "--------\n";
+              //   }
+              // });
               const resData = response.data.data;
-              let textMessage = "帳務資訊：\n";
-              // 遍歷每筆資料，將資料格式化並串接
-              resData.forEach((data, index) => {
-                textMessage += `客戶代號：${data.cus_code}\n客戶名稱：${
-                  data.cus_name
-                }\n目前餘額：${thousandthsFormat(
-                  data.month_balance
-                )}\n最後更新時間：${data.dateTime}\n`;
-                // 在每筆資料之間加上分隔線
-                if (index < resData.length - 1) {
-                  textMessage += "--------\n";
-                }
-              });
-              messages = [
-                {
-                  type: "text",
-                  text: textMessage,
+              const bubbles = resData.map((data) => ({
+                type: "bubble",
+                direction: "ltr",
+                hero: {
+                  type: "image",
+                  url: "https://i.postimg.cc/QCVpCy3w/message-Image-1699596069899.jpg",
+                  size: "full",
+                  aspectRatio: "20:13",
+                  aspectMode: "fit",
+                  margin: "none",
+                  align: "center",
+                  gravity: "center",
                 },
+                body: {
+                  type: "box",
+                  layout: "vertical",
+                  contents: [
+                    {
+                      type: "text",
+                      text: "帳務資訊",
+                      weight: "bold",
+                      size: "xl",
+                    },
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      margin: "lg",
+                      spacing: "sm",
+                      contents: [
+                        {
+                          type: "box",
+                          layout: "baseline",
+                          spacing: "sm",
+                          contents: [
+                            {
+                              type: "text",
+                              text: "客戶代號：",
+                              color: "#aaaaaa",
+                              size: "sm",
+                              flex: 2,
+                              margin: "none",
+                            },
+                            {
+                              type: "text",
+                              text: `${data.cus_code}`,
+                              wrap: true,
+                              color: "#666666",
+                              size: "sm",
+                              flex: 5,
+                            },
+                          ],
+                        },
+                        {
+                          type: "box",
+                          layout: "baseline",
+                          spacing: "sm",
+                          contents: [
+                            {
+                              type: "text",
+                              text: "客戶名稱：",
+                              color: "#aaaaaa",
+                              size: "sm",
+                              flex: 2,
+                            },
+                            {
+                              type: "text",
+                              text: `${data.cus_name}`,
+                              wrap: true,
+                              color: "#666666",
+                              size: "sm",
+                              flex: 5,
+                            },
+                          ],
+                        },
+                        {
+                          type: "box",
+                          layout: "baseline",
+                          contents: [
+                            {
+                              type: "text",
+                              text: "目前餘額：",
+                              color: "#aaaaaa",
+                              size: "sm",
+                              flex: 2,
+                            },
+                            {
+                              type: "text",
+                              text: `${thousandthsFormat(data.month_balance)}`,
+                              wrap: true,
+                              color: "#666666",
+                              size: "sm",
+                              flex: 5,
+                            },
+                          ],
+                        },
+                        {
+                          type: "box",
+                          layout: "baseline",
+                          contents: [
+                            {
+                              type: "text",
+                              text: "更新時間：",
+                              color: "#aaaaaa",
+                              size: "sm",
+                              flex: 2,
+                            },
+                            {
+                              type: "text",
+                              text: `${data.dateTime}`,
+                              wrap: true,
+                              color: "#666666",
+                              size: "sm",
+                              flex: 5,
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                  ],
+              }
+          }));
+              for (const bubble of bubbles) {
+                const flex = {
+                  type: "flex",
+                  altText: "帳務資訊",
+                  contents: bubble, // 單獨的 bubble
+                };
+                await req.reply(flex); //發送
+                console.log(profile); // 印出 profile 資訊
+            }
+              messages = [
                 {
                   type: "template",
                   altText: "點擊此連結進行帳務資訊查詢",
@@ -277,6 +404,8 @@ module.exports = ({ sequelize }) => {
                   },
                 },
               ];
+              await req.reply(messages); //發送
+              console.log(profile); // 印出 profile 資訊
             } else {
               // 查詢失敗或未綁定帳號
               messages = [
@@ -302,10 +431,10 @@ module.exports = ({ sequelize }) => {
                   },
                 },
               ];
+              await req.reply(messages); //發送
+              console.log(profile); // 印出 profile 資訊
             }
 
-            await req.reply(messages); //發送
-            console.log(profile); // 印出 profile 資訊
           } catch (error) {
             console.error("Error:", error); // 捕捉錯誤並打印
             req.reply("發生錯誤，請稍後再試。");
@@ -320,60 +449,57 @@ module.exports = ({ sequelize }) => {
         for (const odj of mids) {
           if (targetCustomerIds.includes(odj.customerId)) {
             console.log("要發送" + JSON.stringify(odj.customerId));
-                if (odj.connectionId.length === 10) {
-                  odj.connectionId = '886' + odj.connectionId.slice(1);
-                }else{
-                  console.log(odj.connectionId+"號碼錯誤");
-                  await MesUpdate(odj.id, "4"); // 推送失敗，電話格式不對 更新 sendType 為 "4"
-                  continue
+            if (odj.connectionId.length === 10) {
+              odj.connectionId = "886" + odj.connectionId.slice(1);
+            } else {
+              console.log(odj.connectionId + "號碼錯誤");
+              await MesUpdate(odj.id, "4"); // 推送失敗，電話格式不對 更新 sendType 為 "4"
+              continue;
+            }
+            let query = `${odj.cusName} 您好!\n${odj.content}`;
+            // 構建表單數據
+            const formData = new URLSearchParams();
+            formData.append("username", "42993157");
+            formData.append("password", "uu42993157");
+            formData.append("dstaddr", odj.connectionId);
+            formData.append("smbody", query);
+            formData.append("smsPointFlag", "1"); // 假設你要設置這個標誌為 1
+
+            try {
+              //發送 POST 請求
+              const response = await axios.post(
+                "https://smsapi.mitake.com.tw/api/mtk/SmSend?CharsetURL=UTF-8",
+                formData.toString(),
+                {
+                  headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                  },
                 }
-                let query = `${odj.cusName} 您好!\n${odj.content}`;
-                // 構建表單數據
-                const formData = new URLSearchParams();
-                formData.append("username", "42993157");
-                formData.append("password", "uu42993157");
-                formData.append("dstaddr", odj.connectionId);
-                formData.append("smbody", query);
-                formData.append("smsPointFlag", "1"); // 假設你要設置這個標誌為 1
-
-                try {
-                  //發送 POST 請求
-                  const response = await axios.post(
-                    "https://smsapi.mitake.com.tw/api/mtk/SmSend?CharsetURL=UTF-8",
-                    formData.toString(),
-                    {
-                      headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                      },
-                    }
-                  );
-                  const lines = response.data.split("\r\n");
-                  const result = {};
-                  lines.forEach((line) => {
-                    if (line.includes("=")) {
-                      const [key, value] = line.split("=");
-                      result[key.trim()] = value.trim();
-                    }
-                  });
-                  console.log(JSON.stringify(result));
-                  if (result.statuscode >= 0 && result.statuscode <= 4) {
-                    await MesUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
-                    console.log(odj.connectionId+"傳送成功！");
-                    console.log("SMS 消耗點數：", result.smsPoint);
-                    console.log("剩餘帳號點數：", result.AccountPoint);
-                  } else {
-
-                    await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
-                    console.error(odj.connectionId+"傳送失敗！");
-                    console.log("錯誤代碼：", result.statuscode);
-                    console.log("剩餘帳號點數：", result.AccountPoint);
-
-                  }
-
-                } catch (error) {
-                  await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
-                  console.error("Error sending SMS:", error);
+              );
+              const lines = response.data.split("\r\n");
+              const result = {};
+              lines.forEach((line) => {
+                if (line.includes("=")) {
+                  const [key, value] = line.split("=");
+                  result[key.trim()] = value.trim();
                 }
+              });
+              console.log(JSON.stringify(result));
+              if (result.statuscode >= 0 && result.statuscode <= 4) {
+                await MesUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
+                console.log(odj.connectionId + "傳送成功！");
+                console.log("SMS 消耗點數：", result.smsPoint);
+                console.log("剩餘帳號點數：", result.AccountPoint);
+              } else {
+                await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+                console.error(odj.connectionId + "傳送失敗！");
+                console.log("錯誤代碼：", result.statuscode);
+                console.log("剩餘帳號點數：", result.AccountPoint);
+              }
+            } catch (error) {
+              await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+              console.error("Error sending SMS:", error);
+            }
           }
         }
       } catch (error) {
@@ -390,21 +516,21 @@ module.exports = ({ sequelize }) => {
           if (targetCustomerIds.includes(odj.customerId)) {
             console.log("要發送" + JSON.stringify(odj.customerId));
 
-              const message = {
-                type: "text",
-                text: `${odj.cusName} 您好!\n${odj.content} `,
-              };
-              try {
-                await bot.push(odj.connectionId, message); // 推送訊息
-                await MesUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
-                console.log(`Message successfully pushed to ${odj.connectionId}`);
-              } catch (error) {
-                await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
-                console.error(
-                  `Error pushing message to ${odj.connectionId}:`,
-                  error
-                )
-              }
+            const message = {
+              type: "text",
+              text: `${odj.cusName} 您好!\n${odj.content} `,
+            };
+            try {
+              await bot.push(odj.connectionId, message); // 推送訊息
+              await MesUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
+              console.log(`Message successfully pushed to ${odj.connectionId}`);
+            } catch (error) {
+              await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+              console.error(
+                `Error pushing message to ${odj.connectionId}:`,
+                error
+              );
+            }
           }
         }
       } catch (error) {
@@ -424,7 +550,10 @@ module.exports = ({ sequelize }) => {
               from: "鉅泰創新股份有限公司<invoice@jutai.net>",
               to: odj.connectionId, // 或從 req.body 取得
               subject: odj.subject,
-              html: `${odj.cusName} 您好!<br>${odj.content.replace(/\n/g, '<br>')}`,
+              html: `${odj.cusName} 您好!<br>${odj.content.replace(
+                /\n/g,
+                "<br>"
+              )}`,
               // attachments: [
               //   {
               //     filename: 'example.xls', // 附檔名稱
