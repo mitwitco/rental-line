@@ -7,6 +7,7 @@ module.exports = ({ sequelize }) => {
   const axios = require("axios");
   const utc = require("dayjs/plugin/utc");
   const timezone = require("dayjs/plugin/timezone");
+  const bot = require("../config/bot.js"); // 從 bot.js 導入 bot
   const targetCustomerIds = [
     "G2200233",
     "G2200195",
@@ -379,8 +380,10 @@ module.exports = ({ sequelize }) => {
                   altText: "帳務資訊",
                   contents: bubble, // 單獨的 bubble
                 };
-              
-                await req.reply(flex); //發送
+                await bot
+                  .push(ID, flex)
+                  .then(() => {})
+                  .catch((error) => {});
               }
               messages = [
                 {
