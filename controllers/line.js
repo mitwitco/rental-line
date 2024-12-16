@@ -297,7 +297,7 @@ module.exports = ({ sequelize }) => {
                             },
                             {
                               type: "text",
-                              text: `${resData}`,
+                              text: `${data.cus_code}`,
                               wrap: true,
                               color: "#666666",
                               size: "sm",
