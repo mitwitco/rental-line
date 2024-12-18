@@ -448,7 +448,7 @@ module.exports = ({ sequelize }) => {
         const mids = await Modselect("1"); //1為手機簡訊
         console.log("手機簡訊需發送筆數：" + mids.length);
         for (const odj of mids) {
-          if (targetCustomerIds.includes(odj.customerId)) {
+          // if (targetCustomerIds.includes(odj.customerId)) {
             console.log("要發送" + JSON.stringify(odj.customerId));
             if (odj.connectionId.length === 10) {
               odj.connectionId = "886" + odj.connectionId.slice(1);
@@ -501,7 +501,7 @@ module.exports = ({ sequelize }) => {
               await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
               console.error("Error sending SMS:", error);
             }
-          }
+          // }
         }
       } catch (error) {
         await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
@@ -514,7 +514,7 @@ module.exports = ({ sequelize }) => {
         const mids = await Modselect("2"); //2為Line
         console.log("Line需發送筆數：" + mids.length);
         for (const odj of mids) {
-          if (targetCustomerIds.includes(odj.customerId)) {
+          // if (targetCustomerIds.includes(odj.customerId)) {
             console.log("要發送" + JSON.stringify(odj.customerId));
 
             const message = {
@@ -533,7 +533,7 @@ module.exports = ({ sequelize }) => {
               );
             }
           }
-        }
+        // }
       } catch (error) {
         await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
         console.error("Error in CronJob:", error);
@@ -544,7 +544,7 @@ module.exports = ({ sequelize }) => {
         const mids = await Modselect("3"); //3為mail
         console.log("Mail需發送筆數：" + mids.length);
         for (const odj of mids) {
-          if (targetCustomerIds.includes(odj.customerId)) {
+          // if (targetCustomerIds.includes(odj.customerId)) {
             console.log("要發送" + JSON.stringify(odj.customerId));
 
             const mailOptions = {
@@ -576,7 +576,7 @@ module.exports = ({ sequelize }) => {
               await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
               console.error("郵件發送失敗:", error);
             }
-          }
+          // }
         }
       } catch (error) {
         await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
