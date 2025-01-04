@@ -695,7 +695,7 @@ module.exports = ({ sequelize }) => {
                     },
                     {
                       "type": "text",
-                      "text": cus_name,
+                      "text": `客戶名稱：${cus_name}`,
                       "size": "sm",
                       "margin": "none",
                       "position": "relative",
