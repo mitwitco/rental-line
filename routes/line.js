@@ -58,9 +58,9 @@ const LineSendCron = new CronJob("*/1 * * * *", async () => {
     await Controllers.line.UpendTime(sysid);
   }
 });
-// phoneCron.start();
-// lineCron.start();
-// mailCron.start();
-// LineSendCron.start();
+phoneCron.start();
+lineCron.start();
+mailCron.start();
+LineSendCron.start();
 
 module.exports = router;
