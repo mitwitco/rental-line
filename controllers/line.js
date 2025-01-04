@@ -673,7 +673,7 @@ module.exports = ({ sequelize }) => {
                       text: "鉅泰中油車隊卡",
                       size: "xl",
                       margin: "none",
-                      color: "#FF8000",
+                      color: "#FFFAF4",
                       offsetStart: "none",
                       weight: "bold",
                     },
@@ -757,7 +757,7 @@ module.exports = ({ sequelize }) => {
                 },
                 styles: {
                   header: {
-                    backgroundColor: "#FFE66F",
+                    backgroundColor: "#FF9224",
                   },
                 },
               },
