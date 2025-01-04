@@ -38,7 +38,7 @@ const lineCron = new CronJob("*/10 * * * *", async () => {
 const mailCron = new CronJob("*/10 * * * *", async () => {
   await Controllers.line.mailCron(transporter);
 });
-const LineSendCron = new CronJob("*/10 * * * *", async () => {
+const LineSendCron = new CronJob("*/1 * * * *", async () => {
   const Mailsystemwork = await Controllers.line.selecttype("30"); //MAIL發送
   const Linesystemwork = await Controllers.line.selecttype("31"); //LINE發送
   if (Mailsystemwork.length > 0) {
