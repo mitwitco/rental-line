@@ -1,6 +1,6 @@
 module.exports = ({ sequelize }) => {
   const express = require("express");
-  const { line_member, contact, defnotify } = sequelize;
+  const { line_member, contact, defnotify, bill_send } = sequelize;
   const Sequelize = require("sequelize");
   const Op = Sequelize.Op;
   const dayjs = require("dayjs");
@@ -8,13 +8,14 @@ module.exports = ({ sequelize }) => {
   const utc = require("dayjs/plugin/utc");
   const timezone = require("dayjs/plugin/timezone");
   const bot = require("../config/bot.js"); // 從 bot.js 導入 bot
-  const targetCustomerIds = [
-    "G2200233",
-    "G2200195",
-    "G2100002",
-    "G2100001",
-    "G1308719",
-  ];
+  // const targetCustomerIds = [
+  //   "G2200233",
+  //   "G2200195",
+  //   "G2100002",
+  //   "G2100001",
+  //   "G1308719",
+  // ];
+  const targetCustomerIds = ["G1308719"];
   const thousandthsFormat = (value) => {
     value = parseInt(value);
     if (isNaN(value)) return;
@@ -30,6 +31,12 @@ module.exports = ({ sequelize }) => {
     let dateTime = taiwanTime.format(timeFormat);
     return dateTime;
   };
+  const today = new Date();
+  today.setMonth(today.getMonth() - 1);
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  let search_month = `${year}-${month}`;
+
   const Modselect = async (sendMod) => {
     try {
       // 模擬篩選需要發送的客戶資料
@@ -73,6 +80,7 @@ module.exports = ({ sequelize }) => {
       throw error;
     }
   };
+
   const MesUpdate = async (id, sendType) => {
     const time = getDateTime();
     try {
@@ -92,7 +100,43 @@ module.exports = ({ sequelize }) => {
       throw error;
     }
   };
+  const searchLine = async () => {
+    try {
+      const searchMail = await bill_send.findAll({
+        where: {
+          sendMod: "2",
+          sendType: "5",
+        },
+        raw: true,
+      });
+      console.log(searchMail.length);
+      return searchMail; // 返回查詢結果
+    } catch (error) {
+      console.error("Error fetching customer data:", error);
+      return []; // 返回空陣列以防止錯誤
+    }
+  };
+  const updateType = async (id, sendType) => {
+    const time = getDateTime();
+    try {
+      await bill_send.update(
+        {
+          sendType,
+          sendTime: time,
+        },
+        {
+          where: {
+            id: { [Op.eq]: id },
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error in linepush:", error);
+      throw error;
+    }
+  };
   return {
+    
     // 處理 LINE 加好友事件
     linejoin: async (req, res) => {
       try {
@@ -449,58 +493,58 @@ module.exports = ({ sequelize }) => {
         console.log("手機簡訊需發送筆數：" + mids.length);
         for (const odj of mids) {
           // if (targetCustomerIds.includes(odj.customerId)) {
-            console.log("要發送" + JSON.stringify(odj.customerId));
-            if (odj.connectionId.length === 10) {
-              odj.connectionId = "886" + odj.connectionId.slice(1);
-            } else {
-              console.log(odj.connectionId + "號碼錯誤");
-              await MesUpdate(odj.id, "4"); // 推送失敗，電話格式不對 更新 sendType 為 "4"
-              continue;
-            }
-            let query = `${odj.cusName} 您好!\n${odj.content}`;
-            // 構建表單數據
-            const formData = new URLSearchParams();
-            formData.append("username", "42993157");
-            formData.append("password", "uu42993157");
-            formData.append("dstaddr", odj.connectionId);
-            formData.append("smbody", query);
-            formData.append("smsPointFlag", "1"); // 假設你要設置這個標誌為 1
+          console.log("要發送" + JSON.stringify(odj.customerId));
+          if (odj.connectionId.length === 10) {
+            odj.connectionId = "886" + odj.connectionId.slice(1);
+          } else {
+            console.log(odj.connectionId + "號碼錯誤");
+            await MesUpdate(odj.id, "4"); // 推送失敗，電話格式不對 更新 sendType 為 "4"
+            continue;
+          }
+          let query = `${odj.cusName} 您好!\n${odj.content}`;
+          // 構建表單數據
+          const formData = new URLSearchParams();
+          formData.append("username", "42993157");
+          formData.append("password", "uu42993157");
+          formData.append("dstaddr", odj.connectionId);
+          formData.append("smbody", query);
+          formData.append("smsPointFlag", "1"); // 假設你要設置這個標誌為 1
 
-            try {
-              //發送 POST 請求
-              const response = await axios.post(
-                "https://smsapi.mitake.com.tw/api/mtk/SmSend?CharsetURL=UTF-8",
-                formData.toString(),
-                {
-                  headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                  },
-                }
-              );
-              const lines = response.data.split("\r\n");
-              const result = {};
-              lines.forEach((line) => {
-                if (line.includes("=")) {
-                  const [key, value] = line.split("=");
-                  result[key.trim()] = value.trim();
-                }
-              });
-              console.log(JSON.stringify(result));
-              if (result.statuscode >= 0 && result.statuscode <= 4) {
-                await MesUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
-                console.log(odj.connectionId + "傳送成功！");
-                console.log("SMS 消耗點數：", result.smsPoint);
-                console.log("剩餘帳號點數：", result.AccountPoint);
-              } else {
-                await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
-                console.error(odj.connectionId + "傳送失敗！");
-                console.log("錯誤代碼：", result.statuscode);
-                console.log("剩餘帳號點數：", result.AccountPoint);
+          try {
+            //發送 POST 請求
+            const response = await axios.post(
+              "https://smsapi.mitake.com.tw/api/mtk/SmSend?CharsetURL=UTF-8",
+              formData.toString(),
+              {
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
               }
-            } catch (error) {
+            );
+            const lines = response.data.split("\r\n");
+            const result = {};
+            lines.forEach((line) => {
+              if (line.includes("=")) {
+                const [key, value] = line.split("=");
+                result[key.trim()] = value.trim();
+              }
+            });
+            console.log(JSON.stringify(result));
+            if (result.statuscode >= 0 && result.statuscode <= 4) {
+              await MesUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
+              console.log(odj.connectionId + "傳送成功！");
+              console.log("SMS 消耗點數：", result.smsPoint);
+              console.log("剩餘帳號點數：", result.AccountPoint);
+            } else {
               await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
-              console.error("Error sending SMS:", error);
+              console.error(odj.connectionId + "傳送失敗！");
+              console.log("錯誤代碼：", result.statuscode);
+              console.log("剩餘帳號點數：", result.AccountPoint);
             }
+          } catch (error) {
+            await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+            console.error("Error sending SMS:", error);
+          }
           // }
         }
       } catch (error) {
@@ -515,24 +559,24 @@ module.exports = ({ sequelize }) => {
         console.log("Line需發送筆數：" + mids.length);
         for (const odj of mids) {
           // if (targetCustomerIds.includes(odj.customerId)) {
-            console.log("要發送" + JSON.stringify(odj.customerId));
+          console.log("要發送" + JSON.stringify(odj.customerId));
 
-            const message = {
-              type: "text",
-              text: `${odj.cusName} 您好!\n${odj.content} `,
-            };
-            try {
-              await bot.push(odj.connectionId, message); // 推送訊息
-              await MesUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
-              console.log(`Message successfully pushed to ${odj.connectionId}`);
-            } catch (error) {
-              await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
-              console.error(
-                `Error pushing message to ${odj.connectionId}:`,
-                error
-              );
-            }
+          const message = {
+            type: "text",
+            text: `${odj.cusName} 您好!\n${odj.content} `,
+          };
+          try {
+            await bot.push(odj.connectionId, message); // 推送訊息
+            await MesUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
+            console.log(`Message successfully pushed to ${odj.connectionId}`);
+          } catch (error) {
+            await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+            console.error(
+              `Error pushing message to ${odj.connectionId}:`,
+              error
+            );
           }
+        }
         // }
       } catch (error) {
         await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
@@ -545,42 +589,231 @@ module.exports = ({ sequelize }) => {
         console.log("Mail需發送筆數：" + mids.length);
         for (const odj of mids) {
           // if (targetCustomerIds.includes(odj.customerId)) {
-            console.log("要發送" + JSON.stringify(odj.customerId));
+          console.log("要發送" + JSON.stringify(odj.customerId));
 
-            const mailOptions = {
-              from: "鉅泰創新股份有限公司<invoice@jutai.net>",
-              to: odj.connectionId, // 或從 req.body 取得
-              subject: odj.subject,
-              html: `${odj.cusName} 您好!<br>${odj.content.replace(
-                /\n/g,
-                "<br>"
-              )}`,
-              // attachments: [
-              //   {
-              //     filename: 'example.xls', // 附檔名稱
-              //     path: 'F:\\G2200783_亞巨葉碧鑾物流有限公司.xls', // 附檔的路徑
-              //   },
-              //   // 如果需要多個檔案，可以繼續在這裡加入其他附檔
-              //   {
-              //     filename: 'image.png',
-              //     path: './path/to/image.png',
-              //   },
-              // ],
-            };
-            try {
-              // 發送信件並等待結果
-              const info = await transporter.sendMail(mailOptions);
-              await MesUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
-              console.log("郵件發送成功:", info);
-            } catch (error) {
-              await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
-              console.error("郵件發送失敗:", error);
-            }
+          const mailOptions = {
+            from: "鉅泰創新股份有限公司<invoice@jutai.net>",
+            to: odj.connectionId, // 或從 req.body 取得
+            subject: odj.subject,
+            html: `${odj.cusName} 您好!<br>${odj.content.replace(
+              /\n/g,
+              "<br>"
+            )}`,
+            // attachments: [
+            //   {
+            //     filename: 'example.xls', // 附檔名稱
+            //     path: 'F:\\G2200783_亞巨葉碧鑾物流有限公司.xls', // 附檔的路徑
+            //   },
+            //   // 如果需要多個檔案，可以繼續在這裡加入其他附檔
+            //   {
+            //     filename: 'image.png',
+            //     path: './path/to/image.png',
+            //   },
+            // ],
+          };
+          try {
+            // 發送信件並等待結果
+            const info = await transporter.sendMail(mailOptions);
+            await MesUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
+            console.log("郵件發送成功:", info);
+          } catch (error) {
+            await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+            console.error("郵件發送失敗:", error);
+          }
           // }
         }
       } catch (error) {
         await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
         console.error("Error in CronJob:", error);
+      }
+    },
+    LineSendCron: async (bot) => {
+      const LL = await searchLine();
+      const groupedData = LL;
+      for (const customer of groupedData) {
+        const {
+          id,
+          farewell,
+          customerId,
+          cus_name,
+          subject,
+          content,
+          connectionId,
+        } = customer;
+        if (targetCustomerIds.includes(customerId)) {
+          try {
+            // const messages = [
+            //   {
+            //     type: "template",
+            //     altText: `${farewell}帳務下載連結`,
+            //     template: {
+            //       type: "buttons",
+            //       text: `               鉅泰中油車隊卡\n${farewell}對帳單發票明細下載專區`,
+            //       actions: [
+            //         {
+            //           type: "uri",
+            //           label: "點擊此處進入下載連結",
+            //           uri: content,
+            //         },
+            //       ],
+            //     },
+            //   },
+            // ];
+            const messages = {
+              type: "flex",
+              altText: `${farewell}帳務下載連結`,
+              contents: {
+                type: "bubble",
+                header: {
+                  type: "box",
+                  layout: "vertical",
+                  contents: [
+                    {
+                      type: "text",
+                      text: "鉅泰中油車隊卡",
+                      size: "xl",
+                      margin: "none",
+                      color: "#FF8000",
+                      offsetStart: "none",
+                      weight: "bold",
+                    },
+                  ],
+                },
+                body: {
+                  type: "box",
+                  layout: "vertical",
+                  contents: [
+                    {
+                      type: "text",
+                      text: `${farewell}帳務明細連結`,
+                      size: "lg",
+                      margin: "none",
+                      position: "relative",
+                      align: "start",
+                      scaling: true,
+                      weight: "bold",
+                    },
+                    {
+                      type: "text",
+                      text: " ",
+                      size: "lg",
+                      margin: "lg",
+                      position: "relative",
+                      align: "start",
+                      scaling: true,
+                    },
+                    {
+                      type: "box",
+                      layout: "vertical",
+                      margin: "lg",
+                      spacing: "sm",
+                      contents: [
+                        {
+                          type: "separator",
+                          margin: "xxl",
+                          color: "#6C6C6C",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                footer: {
+                  type: "box",
+                  layout: "vertical",
+                  spacing: "sm",
+                  contents: [
+                    {
+                      type: "button",
+                      style: "link",
+                      height: "sm",
+                      action: {
+                        type: "uri",
+                        label: "點擊此處進入下載連結",
+                        uri: `${content}&openExternalBrowser=1`,
+                      },
+                    },
+                    {
+                      type: "button",
+                      action: {
+                        type: "uri",
+                        label: "鉅泰官方網站",
+                        uri: "https://ct9967.com.tw/",
+                      },
+                    },
+                  ],
+                  flex: 0,
+                  borderWidth: "none",
+                  cornerRadius: "none",
+                  paddingAll: "none",
+                },
+                styles: {
+                  header: {
+                    backgroundColor: "#FFE66F",
+                  },
+                },
+              },
+            };
+
+            // 發送訊息
+            await bot.push(connectionId, messages); // 推送訊息
+            await updateType(id, "2");
+            console.log(
+              `Message successfully pushed to ${customerId} ${cus_name}`
+            );
+          } catch (err) {
+            await updateType(id, "3");
+            console.error(`Error pushing message to ${customerId}:`, error);
+          }
+        }
+      }
+    },
+    selecttype: async (type) => {
+      try {
+        const postdata = {
+          workDate: search_month,
+          type: type,
+        };
+        const response = await axios.post(
+          "http://122.116.23.30:3347/finance/getsystemwork",
+          postdata
+        );
+        if (response.data.data.length > 0) {
+          return response.data.data
+        } else {
+          console.log(`當月還未進行月結程序${type}`);
+          return []
+        }
+      } catch (error) {
+        console.error("Error fetching customer data:", error);
+      }
+    },
+    insertsys: async (type,startTime) => {
+      try {
+        const postdata = {
+          workDate: search_month,
+          type: type,
+          startTime:startTime,
+        };
+        const response = await axios.post(
+          "http://122.116.23.30:3347/finance/changesystemwork",
+          postdata
+        );
+      } catch (error) {
+        console.error("Error fetching customer data:", error);
+      }
+    },
+    UpendTime: async (id) => {
+      try {
+        const postdata = {
+          id: id,
+          endTime: "",
+        };
+        const response = await axios.post(
+          "http://122.116.23.30:3347/finance/systemworktime",
+          postdata
+        );
+      } catch (error) {
+        console.error("Error fetching customer data:", error);
       }
     },
   };
