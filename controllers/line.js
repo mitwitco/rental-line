@@ -640,7 +640,7 @@ module.exports = ({ sequelize }) => {
           content,
           connectionId,
         } = customer;
-        if (targetCustomerIds.includes(customerId)) {
+        // if (targetCustomerIds.includes(customerId)) {
           try {
             // const messages = [
             //   {
@@ -773,7 +773,7 @@ module.exports = ({ sequelize }) => {
             await updateType(id, "3");
             console.error(`Error pushing message to ${customerId}:`, error);
           }
-        }
+        // }
       }
     },
     selecttype: async (type) => {
