@@ -15,7 +15,7 @@ module.exports = ({ sequelize }) => {
   //   "G2100001",
   //   "G1308719",
   // ];
-  const targetCustomerIds = ["G1308719","G2200803","G2200794"];
+  const targetCustomerIds = ["G1308719", "G2200803", "G2200794"];
   const thousandthsFormat = (value) => {
     value = parseInt(value);
     if (isNaN(value)) return;
@@ -105,7 +105,7 @@ module.exports = ({ sequelize }) => {
       const searchMail = await bill_send.findAll({
         where: {
           sendMod: "2",
-          sendType: "5",
+          sendType: "1",
         },
         raw: true,
       });
@@ -136,7 +136,6 @@ module.exports = ({ sequelize }) => {
     }
   };
   return {
-    
     // 處理 LINE 加好友事件
     linejoin: async (req, res) => {
       try {
@@ -641,138 +640,138 @@ module.exports = ({ sequelize }) => {
           connectionId,
         } = customer;
         // if (targetCustomerIds.includes(customerId)) {
-          try {
-            // const messages = [
-            //   {
-            //     type: "template",
-            //     altText: `${farewell}帳務下載連結`,
-            //     template: {
-            //       type: "buttons",
-            //       text: `               鉅泰中油車隊卡\n${farewell}對帳單發票明細下載專區`,
-            //       actions: [
-            //         {
-            //           type: "uri",
-            //           label: "點擊此處進入下載連結",
-            //           uri: content,
-            //         },
-            //       ],
-            //     },
-            //   },
-            // ];
-            const messages = {
-              type: "flex",
-              altText: `${farewell}帳務下載連結`,
-              contents: {
-                type: "bubble",
-                header: {
-                  type: "box",
-                  layout: "vertical",
-                  contents: [
-                    {
-                      type: "text",
-                      text: "鉅泰中油車隊卡",
-                      size: "xl",
-                      margin: "none",
-                      color: "#FFFAF4",
-                      offsetStart: "none",
-                      weight: "bold",
-                    },
-                  ],
-                },
-                body: {
-                  type: "box",
-                  layout: "vertical",
-                  contents: [
-                    {
-                      type: "text",
-                      text: `${farewell}帳務明細連結`,
-                      size: "lg",
-                      margin: "none",
-                      position: "relative",
-                      align: "start",
-                      scaling: true,
-                      weight: "bold",
-                    },
-                    {
-                      "type": "text",
-                      "text": `客戶名稱：${cus_name}`,
-                      "size": "sm",
-                      "margin": "none",
-                      "position": "relative",
-                      "align": "start",
-                      "scaling": true
-                    },
-                    {
-                      type: "text",
-                      text: " ",
-                      size: "lg",
-                      margin: "lg",
-                      position: "relative",
-                      align: "start",
-                      scaling: true,
-                    },
-                    {
-                      type: "box",
-                      layout: "vertical",
-                      margin: "lg",
-                      spacing: "sm",
-                      contents: [
-                        {
-                          type: "separator",
-                          margin: "xxl",
-                          color: "#6C6C6C",
-                        },
-                      ],
-                    },
-                  ],
-                },
-                footer: {
-                  type: "box",
-                  layout: "vertical",
-                  spacing: "sm",
-                  contents: [
-                    {
-                      type: "button",
-                      style: "link",
-                      height: "sm",
-                      action: {
-                        type: "uri",
-                        label: "點擊此處進入下載連結",
-                        uri: `${content}&openExternalBrowser=1`,
-                      },
-                    },
-                    {
-                      type: "button",
-                      action: {
-                        type: "uri",
-                        label: "鉅泰官方網站",
-                        uri: "https://ct9967.com.tw/",
-                      },
-                    },
-                  ],
-                  flex: 0,
-                  borderWidth: "none",
-                  cornerRadius: "none",
-                  paddingAll: "none",
-                },
-                styles: {
-                  header: {
-                    backgroundColor: "#FF9224",
+        try {
+          // const messages = [
+          //   {
+          //     type: "template",
+          //     altText: `${farewell}帳務下載連結`,
+          //     template: {
+          //       type: "buttons",
+          //       text: `               鉅泰中油車隊卡\n${farewell}對帳單發票明細下載專區`,
+          //       actions: [
+          //         {
+          //           type: "uri",
+          //           label: "點擊此處進入下載連結",
+          //           uri: content,
+          //         },
+          //       ],
+          //     },
+          //   },
+          // ];
+          const messages = {
+            type: "flex",
+            altText: `${farewell}帳務下載連結`,
+            contents: {
+              type: "bubble",
+              header: {
+                type: "box",
+                layout: "vertical",
+                contents: [
+                  {
+                    type: "text",
+                    text: "鉅泰中油車隊卡",
+                    size: "xl",
+                    margin: "none",
+                    color: "#FFFAF4",
+                    offsetStart: "none",
+                    weight: "bold",
                   },
+                ],
+              },
+              body: {
+                type: "box",
+                layout: "vertical",
+                contents: [
+                  {
+                    type: "text",
+                    text: `${farewell}帳務明細連結`,
+                    size: "lg",
+                    margin: "none",
+                    position: "relative",
+                    align: "start",
+                    scaling: true,
+                    weight: "bold",
+                  },
+                  {
+                    type: "text",
+                    text: `客戶名稱：${cus_name}`,
+                    size: "sm",
+                    margin: "none",
+                    position: "relative",
+                    align: "start",
+                    scaling: true,
+                  },
+                  {
+                    type: "text",
+                    text: " ",
+                    size: "lg",
+                    margin: "lg",
+                    position: "relative",
+                    align: "start",
+                    scaling: true,
+                  },
+                  {
+                    type: "box",
+                    layout: "vertical",
+                    margin: "lg",
+                    spacing: "sm",
+                    contents: [
+                      {
+                        type: "separator",
+                        margin: "xxl",
+                        color: "#6C6C6C",
+                      },
+                    ],
+                  },
+                ],
+              },
+              footer: {
+                type: "box",
+                layout: "vertical",
+                spacing: "sm",
+                contents: [
+                  {
+                    type: "button",
+                    style: "link",
+                    height: "sm",
+                    action: {
+                      type: "uri",
+                      label: "點擊此處進入下載連結",
+                      uri: `${content}&openExternalBrowser=1`,
+                    },
+                  },
+                  {
+                    type: "button",
+                    action: {
+                      type: "uri",
+                      label: "鉅泰官方網站",
+                      uri: "https://ct9967.com.tw/",
+                    },
+                  },
+                ],
+                flex: 0,
+                borderWidth: "none",
+                cornerRadius: "none",
+                paddingAll: "none",
+              },
+              styles: {
+                header: {
+                  backgroundColor: "#FF9224",
                 },
               },
-            };
+            },
+          };
 
-            // 發送訊息
-            await bot.push(connectionId, messages); // 推送訊息
-            await updateType(id, "2");
-            console.log(
-              `Message successfully pushed to ${customerId} ${cus_name}`
-            );
-          } catch (err) {
-            await updateType(id, "3");
-            console.error(`Error pushing message to ${customerId}:`, error);
-          }
+          // 發送訊息
+          await bot.push(connectionId, messages); // 推送訊息
+          await updateType(id, "2");
+          console.log(
+            `Message successfully pushed to ${customerId} ${cus_name}`
+          );
+        } catch (err) {
+          await updateType(id, "3");
+          console.error(`Error pushing message to ${customerId}:`, error);
+        }
         // }
       }
     },
@@ -787,21 +786,21 @@ module.exports = ({ sequelize }) => {
           postdata
         );
         if (response.data.data.length > 0) {
-          return response.data.data
+          return response.data.data;
         } else {
           console.log(`當月還未進行月結程序${type}`);
-          return []
+          return [];
         }
       } catch (error) {
         console.error("Error fetching customer data:", error);
       }
     },
-    insertsys: async (type,startTime) => {
+    insertsys: async (type, startTime) => {
       try {
         const postdata = {
           workDate: search_month,
           type: type,
-          startTime:startTime,
+          startTime: startTime,
         };
         const response = await axios.post(
           "http://122.116.23.30:3347/finance/changesystemwork",
