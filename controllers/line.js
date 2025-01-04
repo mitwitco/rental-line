@@ -694,6 +694,15 @@ module.exports = ({ sequelize }) => {
                       weight: "bold",
                     },
                     {
+                      "type": "text",
+                      "text": cus_name,
+                      "size": "sm",
+                      "margin": "none",
+                      "position": "relative",
+                      "align": "start",
+                      "scaling": true
+                    },
+                    {
                       type: "text",
                       text: " ",
                       size: "lg",
