@@ -3,7 +3,7 @@
     "username": "mitwit_out",
     "password": "mw@56632513s",
     "database": "jutai",
-    "host": "114.32.150.22",
+    "host": "219.85.163.90",
     "port": "3306",
     "dialect": "mysql",
     "dialectOptions": {
@@ -21,7 +21,7 @@
     "username": "mitwit_out",
     "password": "mw@56632513s",
     "database": "jutai",
-    "host": "114.32.150.22",
+    "host": "219.85.163.90",
     "port": "3306",
     "dialect": "mysql",
     "dialectOptions": {
