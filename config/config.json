@@ -10,17 +10,6 @@
       "charset": "utf8"
     }
   },
-  "development_OLD": {
-    "username": "mitwit_out",
-    "password": "mw@56632513s",
-    "database": "jutai",
-    "host": "219.85.163.90",
-    "port": "3306",
-    "dialect": "mysql",
-    "dialectOptions": {
-      "charset": "utf8"
-    }
-  },
   "test": {
     "username": "root",
     "password": null,

@@ -209,6 +209,7 @@ module.exports = ({ sequelize }) => {
         console.log(req);
         const time = getDateTime();
         console.log(time + " 處理 LINE 封鎖事件(lineUnjoin)");
+        console.log(time + "測試IP");
         // // 處理使用者加入好友事件
         const userId = req.source.userId;
         // 處理使用者加入好友事件
