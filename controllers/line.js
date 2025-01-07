@@ -824,5 +824,17 @@ module.exports = ({ sequelize }) => {
         console.error("Error fetching customer data:", error);
       }
     },
+    // testLine: async () => {
+    //   try {
+    //     const searchMail = await line_member.findAll({
+    //       raw: true,
+    //     });
+    //     console.log(searchMail.length);
+    //     return searchMail; // 返回查詢結果
+    //   } catch (error) {
+    //     console.error("Error fetching customer data:", error);
+    //     return []; // 返回空陣列以防止錯誤
+    //   }
+    // },
   };
 };
