@@ -23,7 +23,7 @@ const transporter = nodemailer.createTransport({
 
 const linebotParser = bot.parser();
 router.post("/linewebhook", linebotParser);
-router.post("/testLine", Controllers.line.testLine);
+// router.post("/testLine", Controllers.line.testLine);
 
 bot.on("follow", Controllers.line.linejoin);
 bot.on("unfollow", Controllers.line.lineUnjoin);
