@@ -7,7 +7,8 @@
     "port": "3307",
     "dialect": "mysql",
     "dialectOptions": {
-      "charset": "utf8"
+      "charset": "utf8mb4",
+      "collate": "utf8mb4_0900_ai_ci"
     }
   },
   "test": {
@@ -25,7 +26,8 @@
     "port": "3307",
     "dialect": "mysql",
     "dialectOptions": {
-      "charset": "utf8"
+      "charset": "utf8mb4",
+      "collate": "utf8mb4_0900_ai_ci"
     }
   }
 }
