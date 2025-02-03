@@ -5,6 +5,9 @@ const bot = require("../config/bot.js"); // 從 bot.js 導入 bot
 const Controllers = require("../controllers");
 const { CronJob } = require("cron");
 const nodemailer = require("nodemailer");
+let mailid = null;
+let mailtype = null; 
+let mailendTime = null;
 
 // 鉅泰
 const transporter = nodemailer.createTransport({
@@ -62,6 +65,6 @@ const LineSendCron = new CronJob("*/10 * * * *", async () => {
 phoneCron.start();
 lineCron.start();
 mailCron.start();
-// LineSendCron.start();
+LineSendCron.start();
 
 module.exports = router;
