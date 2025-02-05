@@ -65,6 +65,6 @@ const LineSendCron = new CronJob("*/2 * * * *", async () => {
 phoneCron.start();
 lineCron.start();
 mailCron.start();
-LineSendCron.start();
+// LineSendCron.start();
 
 module.exports = router;
