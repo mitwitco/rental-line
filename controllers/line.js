@@ -105,7 +105,7 @@ module.exports = ({ sequelize }) => {
       const searchMail = await bill_send.findAll({
         where: {
           sendMod: "2",
-          sendType: "5",
+          sendType: "1",
         },
         raw: true,
       });
@@ -640,7 +640,7 @@ module.exports = ({ sequelize }) => {
           content,
           connectionId,
         } = customer;
-        if (targetCustomerIds.includes(customerId)) {
+        // if (targetCustomerIds.includes(customerId)) {
           try {
             // const messages = [
             //   {
@@ -773,7 +773,7 @@ module.exports = ({ sequelize }) => {
             await updateType(id, "3");
             console.error(`Error pushing message to ${customerId}:`, error);
           }
-        }
+        // }
         // 等待 20 秒再處理下一個
         await new Promise((resolve) => setTimeout(resolve, 15000));
       }
