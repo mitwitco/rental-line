@@ -105,7 +105,7 @@ module.exports = ({ sequelize }) => {
       const searchMail = await bill_send.findAll({
         where: {
           sendMod: "2",
-          sendType: "1",
+          sendType: "5",
         },
         raw: true,
       });
@@ -548,7 +548,6 @@ module.exports = ({ sequelize }) => {
           // }
         }
       } catch (error) {
-        await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
         console.error("Error in CronJob:", error);
       }
     },
@@ -640,7 +639,7 @@ module.exports = ({ sequelize }) => {
           content,
           connectionId,
         } = customer;
-        // if (targetCustomerIds.includes(customerId)) {
+        if (targetCustomerIds.includes(customerId)) {
           try {
             // const messages = [
             //   {
@@ -773,7 +772,7 @@ module.exports = ({ sequelize }) => {
             await updateType(id, "3");
             console.error(`Error pushing message to ${customerId}:`, error);
           }
-        // }
+        }
         // 等待 20 秒再處理下一個
         await new Promise((resolve) => setTimeout(resolve, 15000));
       }

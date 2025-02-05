@@ -8,9 +8,7 @@
     "dialect": "mysql",
     "dialectOptions": {
       "charset": "utf8mb4",
-      "collate": "utf8mb4_0900_ai_ci",
-      "connectTimeout": 60000000,
-      "keepAlive": true
+      "connectTimeout": 60000000
     }
   },
   "test": {
@@ -29,9 +27,7 @@
     "dialect": "mysql",
     "dialectOptions": {
       "charset": "utf8mb4",
-      "collate": "utf8mb4_0900_ai_ci",
-      "connectTimeout": 60000000,
-      "keepAlive": true
+      "connectTimeout": 60000000
     }
   }
 }
