@@ -15,7 +15,7 @@ module.exports = ({ sequelize }) => {
   //   "G2100001",
   //   "G1308719",
   // ];
-  const targetCustomerIds = ["G1308719"];
+  const targetCustomerIds = ["G1308719","G2100001","G2100002"];
   const thousandthsFormat = (value) => {
     value = parseInt(value);
     if (isNaN(value)) return;
