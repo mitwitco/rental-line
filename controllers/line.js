@@ -109,7 +109,7 @@ module.exports = ({ sequelize }) => {
         },
         raw: true,
       });
-      console.log(searchMail.length);
+      console.log("需寄送"+searchMail.length);
       return searchMail; // 返回查詢結果
     } catch (error) {
       console.error("Error fetching customer data:", error);
