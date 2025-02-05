@@ -775,7 +775,7 @@ module.exports = ({ sequelize }) => {
           }
         }
         // 等待 20 秒再處理下一個
-        await new Promise((resolve) => setTimeout(resolve, 20000));
+        await new Promise((resolve) => setTimeout(resolve, 15000));
       }
     },
     selecttype: async (type) => {
