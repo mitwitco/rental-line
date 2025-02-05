@@ -39,7 +39,7 @@ const lineCron = new CronJob("*/10 * * * *", async () => {
 const mailCron = new CronJob("*/10 * * * *", async () => {
   await Controllers.line.mailCron(transporter);
 });
-const LineSendCron = new CronJob("*/20 * * * *", async () => {
+const LineSendCron = new CronJob("*/30 * * * *", async () => {
   let mailid = null;
   let mailtype = null;
   let mailendTime = null;
