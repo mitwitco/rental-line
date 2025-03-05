@@ -773,7 +773,7 @@ module.exports = ({ sequelize }) => {
             console.error(`Error pushing message to ${customerId}:`, error);
           }
         // }
-        // await new Promise((resolve) => setTimeout(resolve, 5000));
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       }
     },
     selecttype: async (type) => {
