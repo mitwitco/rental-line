@@ -43,21 +43,21 @@ const LineSendCron = new CronJob("*/2 * * * *", async () => {
   let mailid = null;
   let mailtype = null;
   let mailendTime = null;
-  const Mailsystemwork = await Controllers.line.selecttype("30"); //MAIL發送
-  const Linesystemwork = await Controllers.line.selecttype("31"); //LINE發送
+  const Mailsystemwork = await Controllers.line.selecttype("31"); //MAIL發送
+  const Linesystemwork = await Controllers.line.selecttype("32"); //LINE發送
   if (Mailsystemwork.length > 0) {
     mailid = Mailsystemwork[0].id;
     mailtype = Mailsystemwork[0].type;
     mailendTime = Mailsystemwork[0].endTime;
   }
-  if (mailtype == "30" && mailendTime != "0" && Linesystemwork.length == 0) {
+  if (mailtype == "31" && mailendTime != "0" && Linesystemwork.length == 0) {
     console.log("MAIL寄送完成&LINE未開始發送");
-    console.log("新增31排成(發送LINE)");
-    await Controllers.line.insertsys("31", "");
+    console.log("新增32排成(發送LINE)");
+    await Controllers.line.insertsys("32", "");
     console.log("開始發送");
     await Controllers.line.LineSendCron(bot);
-    console.log("壓29結束時間");
-    const systemwork = await Controllers.line.selecttype("29"); //開始寄送總排程
+    console.log("壓結束時間");
+    const systemwork = await Controllers.line.selecttype("30"); //開始寄送總排程
     const sysid = systemwork[0].id;
     await Controllers.line.UpendTime(sysid);
   }
@@ -65,6 +65,6 @@ const LineSendCron = new CronJob("*/2 * * * *", async () => {
 phoneCron.start();
 lineCron.start();
 mailCron.start();
-// LineSendCron.start();
+LineSendCron.start();
 
 module.exports = router;
