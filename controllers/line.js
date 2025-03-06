@@ -445,7 +445,7 @@ module.exports = ({ sequelize }) => {
                       {
                         type: "uri",
                         label: "帳務查詢網站",
-                        uri: "https://jutai.ct9967.com.tw/login&openExternalBrowser=1",
+                        uri: "https://jutai.ct9967.com.tw/login?openExternalBrowser=1",
                       },
                     ],
                   },
@@ -471,7 +471,7 @@ module.exports = ({ sequelize }) => {
                       {
                         type: "uri",
                         label: "帳務查詢網站",
-                        uri: "https://jutai.ct9967.com.tw/login&openExternalBrowser=1",
+                        uri: "https://jutai.ct9967.com.tw/login?openExternalBrowser=1",
                       },
                     ],
                   },
