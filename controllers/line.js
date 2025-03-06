@@ -445,7 +445,7 @@ module.exports = ({ sequelize }) => {
                       {
                         type: "uri",
                         label: "帳務查詢網站",
-                        uri: "http://122.116.23.30:3346/#/login",
+                        uri: "https://jutai.ct9967.com.tw/login",
                       },
                     ],
                   },
