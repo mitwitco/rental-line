@@ -110,7 +110,7 @@ module.exports = ({ sequelize }) => {
         });
         console.log(memberList.length);
         if (memberList.length > 0) {
-          await line_member.update(
+          await line_message.update(
             {
               memberBlockedTime: time,
             },
