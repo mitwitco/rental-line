@@ -34,65 +34,65 @@ module.exports = ({ sequelize }) => {
         const time = getDateTime();
         console.log(time + " 處理 LINE 加好友事件(linejoin)");
         const userId = req.source.userId;
-        // const profile = await req.source.profile();
+        const profile = await req.source.profile();
         console.log(`"USERID:${userId}"`)
-        // // 處理使用者加入好友事件
-        // const memberList = await line_member.findAll({
-        //   where: {
-        //     memberLineId: { [Op.eq]: userId },
-        //     companyId: { [Op.eq]: "1" },
-        //   },
-        //   raw: true,
-        // });
-        // console.log(memberList.length);
-        // if (memberList.length > 0) {
-        //   // 封鎖後重新加入好友
-        //   await line_member.update(
-        //     {
-        //       memberProfileName: profile.displayName,
-        //       memberBlockedTime: null,
-        //       memberUpdateTime: time,
-        //     },
-        //     {
-        //       where: {
-        //         memberId: { [Op.eq]: memberList[0].memberId },
-        //       },
-        //     }
-        //   );
-        // } else {
-        //   await line_member.create({
-        //     companyId: "1",
-        //     memberLineId: userId,
-        //     memberProfileName: profile.displayName,
-        //     memberJoinTime: time,
-        //   });
-        // }
+        // 處理使用者加入好友事件
+        const memberList = await line_member.findAll({
+          where: {
+            memberLineId: { [Op.eq]: userId },
+            companyId: { [Op.eq]: "1" },
+          },
+          raw: true,
+        });
+        console.log(memberList.length);
+        if (memberList.length > 0) {
+          // 封鎖後重新加入好友
+          await line_member.update(
+            {
+              memberProfileName: profile.displayName,
+              memberBlockedTime: null,
+              memberUpdateTime: time,
+            },
+            {
+              where: {
+                memberId: { [Op.eq]: memberList[0].memberId },
+              },
+            }
+          );
+        } else {
+          await line_member.create({
+            companyId: "1",
+            memberLineId: userId,
+            memberProfileName: profile.displayName,
+            memberJoinTime: time,
+          });
+        }
         // //JASON 綁定
         // const url = `http://122.116.23.30:3347/basic-info/AccessControl?userId=${userId}`;
-        // const messages = [
-        //   {
-        //     type: "template",
-        //     altText: "點擊此連結進行帳務資訊查詢",
-        //     template: {
-        //       type: "buttons",
-        //       text: `${profile.displayName}您好！\n\n感謝您支持鉅泰創新中油車隊卡\n請您點選下方按鈕做綁定帳號\n\n如尚未簽約，請先發訊息給小幫手作協助\n\n祝您行車順利，業績長紅！`,
-        //       actions: [
-        //         {
-        //           type: "uri",
-        //           label: "綁定帳號",
-        //           uri: url,
-        //         },
-        //       ],
-        //     },
-        //   },
-        // ];
+        const messages = [
+          {
+            type: "template",
+            altText: "點擊此連結進行帳務資訊查詢",
+            template: {
+              type: "buttons",
+              text: `${profile.displayName}您好！\n\n感謝您支持鉅泰創新中油車隊卡\n請您點選下方按鈕做綁定帳號\n\n如尚未簽約，請先發訊息給小幫手作協助\n\n祝您行車順利，業績長紅！`,
+              actions: [
+                {
+                  type: "uri",
+                  label: "綁定帳號",
+                  uri: url,
+                },
+              ],
+            },
+          },
+        ];
         // // 發送訊息
-        // await req.reply(messages);
-        // console.log({ returnCode: 0, message: "處理 LINE 加好友事件" });
-        // return { returnCode: 0, message: "處理 LINE 加好友事件" };
+        await req.reply(messages);
+        console.log({ returnCode: 0, message: "處理 LINE 加好友事件" });
+        return { returnCode: 0, message: "處理 LINE 加好友事件" };
       } catch (err) {
         console.log({ returnCode: 500, message: "系統錯誤", err: err });
-        // return { returnCode: 500, message: "系統錯誤", err: err };
+        return { returnCode: 500, message: "系統錯誤", err: err };
       }
     },
     // 處理 LINE 封鎖事件
