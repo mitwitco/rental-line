@@ -13,6 +13,7 @@ bot.on("follow", Controllers.line.linejoin);
 bot.on("unfollow", Controllers.line.lineUnjoin);
 //JASON
 // bot.on("message", Controllers.line.linemessage);
+//TEST
 
 
 
