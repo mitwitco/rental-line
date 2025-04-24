@@ -116,7 +116,7 @@ module.exports = ({ sequelize }) => {
             },
             {
               where: {
-                memberId: { [Op.eq]: memberList[0].memberId },
+                line_messageId: { [Op.eq]: memberList[0].memberId },
               },
             }
           );
