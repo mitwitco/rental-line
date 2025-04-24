@@ -1,6 +1,6 @@
 module.exports = ({ sequelize }) => {
   const express = require("express");
-  // const { line_member, contact, defnotify, bill_send } = sequelize;
+  const { line_message} = sequelize;
   const Sequelize = require("sequelize");
   const Op = Sequelize.Op;
   const dayjs = require("dayjs");
@@ -35,37 +35,35 @@ module.exports = ({ sequelize }) => {
         console.log(time + " 處理 LINE 加好友事件(linejoin)");
         const userId = req.source.userId;
         const profile = await req.source.profile();
-        // 處理使用者加入好友事件
-        // const memberList = await line_member.findAll({
-        //   where: {
-        //     memberLineId: { [Op.eq]: userId },
-        //     companyId: { [Op.eq]: "1" },
-        //   },
-        //   raw: true,
-        // });
-        // console.log(memberList.length);
-        // if (memberList.length > 0) {
-        //   // 封鎖後重新加入好友
-        //   await line_member.update(
-        //     {
-        //       memberProfileName: profile.displayName,
-        //       memberBlockedTime: null,
-        //       memberUpdateTime: time,
-        //     },
-        //     {
-        //       where: {
-        //         memberId: { [Op.eq]: memberList[0].memberId },
-        //       },
-        //     }
-        //   );
-        // } else {
-        //   await line_member.create({
-        //     companyId: "1",
-        //     memberLineId: userId,
-        //     memberProfileName: profile.displayName,
-        //     memberJoinTime: time,
-        //   });
-        // }
+        //處理使用者加入好友事件
+        const memberList = await line_message.findAll({
+          where: {
+            memberLineId: { [Op.eq]: userId }
+          },
+          raw: true,
+        });
+        console.log(memberList.length);
+        if (memberList.length > 0) {
+          // 封鎖後重新加入好友
+          await line_message.update(
+            {
+              memberProfileName: profile.displayName,
+              memberBlockedTime: null,
+              memberUpdateTime: time,
+            },
+            {
+              where: {
+                line_messageId: { [Op.eq]: memberList[0].memberId },
+              },
+            }
+          );
+        } else {
+          await line_message.create({
+            memberLineId: userId,
+            memberProfileName: profile.displayName,
+            memberJoinTime: time,
+          });
+        }
         // //JASON 綁定
         const url = `http://122.116.23.30:3347/basic-info/AccessControl?userId=${userId}`;
         const messages = [
