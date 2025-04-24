@@ -53,7 +53,7 @@ module.exports = ({ sequelize }) => {
             },
             {
               where: {
-                line_messageId: { [Op.eq]: memberList[0].memberId },
+                line_messageId: { [Op.eq]: memberList[0].line_messageId },
               },
             }
           );
@@ -116,12 +116,12 @@ module.exports = ({ sequelize }) => {
             },
             {
               where: {
-                line_messageId: { [Op.eq]: memberList[0].memberId },
+                line_messageId: { [Op.eq]: memberList[0].line_messageId },
               },
             }
           );
         }
-        console.log(memberList[0].memberId);
+        console.log(memberList[0].line_messageId);
         // await contact.update(
         //   {
         //     mode: "2",
