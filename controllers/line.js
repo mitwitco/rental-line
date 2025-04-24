@@ -35,7 +35,6 @@ module.exports = ({ sequelize }) => {
         console.log(time + " 處理 LINE 加好友事件(linejoin)");
         const userId = req.source.userId;
         const profile = await req.source.profile();
-        console.log(`"USERID:${userId}"`)
         // 處理使用者加入好友事件
         // const memberList = await line_member.findAll({
         //   where: {
@@ -68,7 +67,7 @@ module.exports = ({ sequelize }) => {
         //   });
         // }
         // //JASON 綁定
-        // const url = `http://122.116.23.30:3347/basic-info/AccessControl?userId=${userId}`;
+        const url = `http://122.116.23.30:3347/basic-info/AccessControl?userId=${userId}`;
         const messages = [
           {
             type: "template",
@@ -76,6 +75,13 @@ module.exports = ({ sequelize }) => {
             template: {
               type: "buttons",
               text: `您好！\n\n感謝您支持鉅泰創新中油車隊卡\n請您點選下方按鈕做綁定帳號\n\n如尚未簽約，請先發訊息給小幫手作協助\n\n祝您行車順利，業績長紅！`,
+              actions: [
+                {
+                  type: "uri",
+                  label: "綁定帳號",
+                  uri: url,
+                },
+              ],
             },
           },
         ];
