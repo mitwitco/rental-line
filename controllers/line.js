@@ -102,10 +102,9 @@ module.exports = ({ sequelize }) => {
         // // 處理使用者加入好友事件
         const userId = req.source.userId;
         // 處理使用者加入好友事件
-        const memberList = await line_member.findAll({
+        const memberList = await line_message.findAll({
           where: {
             memberLineId: { [Op.eq]: userId },
-            companyId: { [Op.eq]: "1" },
           },
           raw: true,
         });
@@ -123,17 +122,17 @@ module.exports = ({ sequelize }) => {
           );
         }
         console.log(memberList[0].memberId);
-        await contact.update(
-          {
-            mode: "2",
-            deleteTime: time,
-          },
-          {
-            where: {
-              memberId: { [Op.eq]: memberList[0].memberId },
-            },
-          }
-        );
+        // await contact.update(
+        //   {
+        //     mode: "2",
+        //     deleteTime: time,
+        //   },
+        //   {
+        //     where: {
+        //       memberId: { [Op.eq]: memberList[0].memberId },
+        //     },
+        //   }
+        // );
         console.log({ returnCode: 0, message: "處理 LINE 封鎖事件" });
         return { returnCode: 0, message: "處理 LINE 封鎖事件" };
       } catch (err) {
