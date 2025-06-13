@@ -149,19 +149,30 @@ module.exports = ({ sequelize }) => {
               messages = [
                 {
                   type: "template",
-                  altText: "點擊此連結進行帳務資訊查詢",
+                  altText: "月租服務",
                   template: {
                     type: "buttons",
-                    text: `Hello ${profile.displayName}${userId}，點擊下方按鈕選擇功能：`,
+                    text: `提供月租會員場站各項服務通知及電子帳單`,
                     actions: [
                       {
                         type: "uri",
-                        label: "綁定帳號",
+                        label: "服務註冊",
                         uri:"https://jutai.mitwit-cre.com.tw/login?openExternalBrowser=1",
                       },
                       {
                         type: "uri",
-                        label: "帳務查詢網站",
+                        label: "月租繳費",
+                        uri: "https://jutai.mitwit-cre.com.tw/login?openExternalBrowser=1",
+                      },
+                      {
+                        type: "uri",
+                        label: "會員服務",
+                        // uri: `https://rental.mitwit-cre.com.tw/?mid=${userId}&openExternalBrowser=1`,
+                        uri: `https://rental.mitwit-cre.com.tw/?mid=U10fb04289f1d37ae1dfadf56fb8aa0c9&openExternalBrowser=1`,
+                      },
+                      {
+                        type: "uri",
+                        label: "開始登記",
                         uri: "https://jutai.mitwit-cre.com.tw/login?openExternalBrowser=1",
                       },
                     ],
