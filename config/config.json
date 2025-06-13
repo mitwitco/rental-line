@@ -1,10 +1,10 @@
 {
   "development": {
-    "username": "ctc",
-    "password": "ctc94031738",
-    "database": "member001",
-    "host": "122.116.23.30",
-    "port": "3307",
+    "username": "mitwit_rental",
+    "password": "mitwit56632513",
+    "database": "member000",
+    "host": "219.85.83.15",
+    "port": "3306",
     "dialect": "mysql",
     "dialectOptions": {
       "charset": "utf8mb4",
@@ -19,11 +19,11 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "ctc",
-    "password": "ctc94031738",
-    "database": "member001",
-    "host": "122.116.23.30",
-    "port": "3307",
+    "username": "mitwit_rental",
+    "password": "mitwit56632513",
+    "database": "member000",
+    "host": "219.85.83.15",
+    "port": "3306",
     "dialect": "mysql",
     "dialectOptions": {
       "charset": "utf8mb4",

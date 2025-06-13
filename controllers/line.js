@@ -65,18 +65,18 @@ module.exports = ({ sequelize }) => {
           });
         }
         // //JASON 綁定
-        const url = `http://122.116.23.30:3347/basic-info/AccessControl?userId=${userId}`;
+        const url = `https://www.google.com.tw/?hl=zh_TW`;
         const messages = [
           {
             type: "template",
-            altText: "點擊此連結進行帳務資訊查詢",
+            altText: "點擊此連結進行車號綁定",
             template: {
               type: "buttons",
-              text: `您好！\n\n感謝您支持鉅泰創新中油車隊卡\n請您點選下方按鈕做綁定帳號\n\n如尚未簽約，請先發訊息給小幫手作協助\n\n祝您行車順利，業績長紅！`,
+              text: `您好！\n\n請您點選下方按鈕做車號綁定！`,
               actions: [
                 {
                   type: "uri",
-                  label: "綁定帳號",
+                  label: "車號綁定",
                   uri: url,
                 },
               ],
