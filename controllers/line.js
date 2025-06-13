@@ -167,9 +167,8 @@ module.exports = ({ sequelize }) => {
                       {
                         type: "uri",
                         label: "會員服務",
-                        // uri: `https://rental.mitwit-cre.com.tw/?mid=${userId}&openExternalBrowser=1`,
+                        uri: `https://rental.mitwit-cre.com.tw/?mid=${userId}&openExternalBrowser=1`,
                         // uri: `https://rental.mitwit-cre.com.tw/?mid=U10fb04289f1d37ae1dfadf56fb8aa0c9&openExternalBrowser=1`,
-                        uri: `http://219.85.83.15:3600/?mid=U10fb04289f1d37ae1dfadf56fb8aa0c9&openExternalBrowser=1`,
                       },
                       {
                         type: "uri",
