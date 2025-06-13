@@ -156,7 +156,7 @@ module.exports = ({ sequelize }) => {
                       {
                         type: "uri",
                         label: "綁定帳號",
-                        uri: url,
+                        uri:"https://jutai.mitwit-cre.com.tw/login?openExternalBrowser=1",
                       },
                       {
                         type: "uri",
