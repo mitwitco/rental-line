@@ -143,6 +143,7 @@ module.exports = ({ sequelize }) => {
     linemessage: async (req, res) => {
       {
         const profile = await req.source.profile();
+        const userId = req.source.userId;
         // 確認收到的訊息是否為 "月租服務"
         if (req.message.type === "text" && req.message.text === "月租服務") { 
               messages = [
@@ -151,7 +152,7 @@ module.exports = ({ sequelize }) => {
                   altText: "點擊此連結進行帳務資訊查詢",
                   template: {
                     type: "buttons",
-                    text: `Hello ${profile.displayName}，點擊下方按鈕選擇功能：`,
+                    text: `Hello ${profile.displayName}${userId}，點擊下方按鈕選擇功能：`,
                     actions: [
                       {
                         type: "uri",
