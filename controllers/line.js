@@ -142,6 +142,7 @@ module.exports = ({ sequelize }) => {
     },
     linemessage: async (req, res) => {
       {
+        const profile = await req.source.profile();
         // 確認收到的訊息是否為 "月租服務"
         if (req.message.type === "text" && req.message.text === "月租服務") { 
               messages = [
