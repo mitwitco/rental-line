@@ -70,17 +70,17 @@ module.exports = ({ sequelize }) => {
           {
             type: "template",
             altText: "HI!",
-            // template: {
-            //   type: "buttons",
-            //   text: `您好！\n\n請您點選下方按鈕做車號綁定！`,
-            //   actions: [
-            //     {
-            //       type: "uri",
-            //       label: "車號綁定",
-            //       uri: url,
-            //     },
-            //   ],
-            // },
+            template: {
+              type: "buttons",
+              text: `您好！\n\n！`,
+              actions: [
+                {
+                  type: "uri",
+                  label: "按鈕",
+                  uri: url,
+                },
+              ],
+            },
           },
         ];
         // // 發送訊息
@@ -142,180 +142,8 @@ module.exports = ({ sequelize }) => {
     },
     linemessage: async (req, res) => {
       {
-        // 確認收到的訊息是否為 "綁定"
-        if (req.message.type === "text" && req.message.text === "月租服務") {
-          try {
-            // 若訊息為 "綁定"，取得用戶的 profile
-            const profile = await req.source.profile(); // 取得 profile
-            const ID = profile.userId;
-            const url = `http://122.116.23.30:3347/basic-info/AccessControl?userId=${ID}`;
-            let messages = [];
-            let response;
-            try {
-              const postdata = {
-                memberLineId: ID,
-              };
-              response = await axios.post(
-                "http://122.116.23.30:3347/link/balance",
-                postdata
-              );
-            } catch (apiError) {
-              console.error("API 查詢餘額發生錯誤:", apiError);
-            }
-
-            if (
-              response &&
-              response.status === 200 &&
-              response.data.returnCode === 0
-            ) {
-              // // API 回傳成功，提取客戶資料
-              // const resData = response.data.data;
-              // let textMessage = "帳務資訊：\n";
-              // // 遍歷每筆資料，將資料格式化並串接
-              // resData.forEach((data, index) => {
-              //   textMessage += `客戶代號：${data.cus_code}\n客戶名稱：${
-              //     data.cus_name
-              //   }\n目前餘額：${thousandthsFormat(
-              //     data.month_balance
-              //   )}\n最後更新時間：${data.dateTime}\n`;
-              //   // 在每筆資料之間加上分隔線
-              //   if (index < resData.length - 1) {
-              //     textMessage += "--------\n";
-              //   }
-              // });
-              const resData = response.data.data;
-              const bubbles = resData.map((data) => ({
-                type: "bubble",
-                direction: "ltr",
-                hero: {
-                  type: "image",
-                  url: "https://i.postimg.cc/QCVpCy3w/message-Image-1699596069899.jpg",
-                  size: "full",
-                  aspectRatio: "20:13",
-                  aspectMode: "fit",
-                  margin: "none",
-                  align: "center",
-                  gravity: "center",
-                },
-                body: {
-                  type: "box",
-                  layout: "vertical",
-                  contents: [
-                    {
-                      type: "text",
-                      text: "帳務資訊",
-                      weight: "bold",
-                      size: "xl",
-                    },
-                    {
-                      type: "box",
-                      layout: "vertical",
-                      margin: "lg",
-                      spacing: "sm",
-                      contents: [
-                        {
-                          type: "box",
-                          layout: "baseline",
-                          spacing: "sm",
-                          contents: [
-                            {
-                              type: "text",
-                              text: "客戶代號：",
-                              color: "#aaaaaa",
-                              size: "sm",
-                              flex: 2,
-                              margin: "none",
-                            },
-                            {
-                              type: "text",
-                              text: `${data.cus_code}`,
-                              wrap: true,
-                              color: "#666666",
-                              size: "sm",
-                              flex: 5,
-                            },
-                          ],
-                        },
-                        {
-                          type: "box",
-                          layout: "baseline",
-                          spacing: "sm",
-                          contents: [
-                            {
-                              type: "text",
-                              text: "客戶名稱：",
-                              color: "#aaaaaa",
-                              size: "sm",
-                              flex: 2,
-                            },
-                            {
-                              type: "text",
-                              text: `${data.cus_name}`,
-                              wrap: true,
-                              color: "#666666",
-                              size: "sm",
-                              flex: 5,
-                            },
-                          ],
-                        },
-                        {
-                          type: "box",
-                          layout: "baseline",
-                          contents: [
-                            {
-                              type: "text",
-                              text: "目前餘額：",
-                              color: "#aaaaaa",
-                              size: "sm",
-                              flex: 2,
-                            },
-                            {
-                              type: "text",
-                              text: `${thousandthsFormat(data.month_balance)}`,
-                              wrap: true,
-                              color: "#666666",
-                              size: "sm",
-                              flex: 5,
-                            },
-                          ],
-                        },
-                        {
-                          type: "box",
-                          layout: "baseline",
-                          contents: [
-                            {
-                              type: "text",
-                              text: "更新時間：",
-                              color: "#aaaaaa",
-                              size: "sm",
-                              flex: 2,
-                            },
-                            {
-                              type: "text",
-                              text: `${data.dateTime}`,
-                              wrap: true,
-                              color: "#666666",
-                              size: "sm",
-                              flex: 5,
-                            },
-                          ],
-                        },
-                      ],
-                    },
-                  ],
-                },
-              }));
-              for (const bubble of bubbles) {
-                const flex = {
-                  type: "flex",
-                  altText: "帳務資訊",
-                  contents: bubble, // 單獨的 bubble
-                };
-                await bot
-                  .push(ID, flex)
-                  .then(() => {})
-                  .catch((error) => {});
-              }
+        // 確認收到的訊息是否為 "月租服務"
+        if (req.message.type === "text" && req.message.text === "月租服務") { 
               messages = [
                 {
                   type: "template",
@@ -339,40 +167,8 @@ module.exports = ({ sequelize }) => {
                 },
               ];
               await req.reply(messages); //發送
-            } else {
-              // 查詢失敗或未綁定帳號
-              messages = [
-                { type: "text", text: "請先綁定帳號，才能進行帳務資訊查詢。" },
-                {
-                  type: "template",
-                  altText: "點擊此連結進行帳務資訊查詢",
-                  template: {
-                    type: "buttons",
-                    text: `Hello ${profile.displayName}，點擊下方按鈕選擇功能：`,
-                    actions: [
-                      {
-                        type: "uri",
-                        label: "綁定帳號",
-                        uri: url,
-                      },
-                      {
-                        type: "uri",
-                        label: "帳務查詢網站",
-                        uri: "https://jutai.mitwit-cre.com.tw/login?openExternalBrowser=1",
-                      },
-                    ],
-                  },
-                },
-              ];
-              await req.reply(messages); //發送
-              console.log(profile); // 印出 profile 資訊
-            }
-          } catch (error) {
-            console.error("Error:", error); // 捕捉錯誤並打印
-            req.reply("發生錯誤，請稍後再試。");
-          }
+            } 
         }
-      }
     },
   };
 };
