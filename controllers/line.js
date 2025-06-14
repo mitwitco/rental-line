@@ -156,23 +156,23 @@ module.exports = ({ sequelize }) => {
                     actions: [
                       {
                         type: "uri",
-                        label: "服務註冊",
+                        label: "📝服務註冊",
                         uri:"https://jutai.mitwit-cre.com.tw/login?openExternalBrowser=1",
                       },
                       {
                         type: "uri",
-                        label: "月租繳費",
+                        label: "💰月租繳費",
                         uri: "https://jutai.mitwit-cre.com.tw/login?openExternalBrowser=1",
                       },
                       {
                         type: "uri",
-                        label: "會員服務",
+                        label: "👨‍💻會員服務",
                         uri: `https://rental.mitwit-cre.com.tw/?mid=${userId}&openExternalBrowser=1`,
                         // uri: `https://rental.mitwit-cre.com.tw/?mid=U10fb04289f1d37ae1dfadf56fb8aa0c9&openExternalBrowser=1`,
                       },
                       {
                         type: "uri",
-                        label: "開始登記",
+                        label: "🙂開始登記",
                         uri: "https://jutai.mitwit-cre.com.tw/login?openExternalBrowser=1",
                       },
                     ],
