@@ -63,6 +63,31 @@ module.exports = ({ sequelize }) => {
       console.error("Error in linepush:", error);
     }
   };
+  const MesUpdate = async (id,status) => {
+    const time = getDateTime();
+    try {
+      await line_message.sequelize.query(
+        `
+        UPDATE notify 
+        SET 
+          timeStamp = :timeStamp
+          status= :status
+        WHERE id = :id
+        `,
+        {
+          replacements: {
+            id: id,
+            status:status,
+            timeStamp: time,
+
+          },
+          type: line_message.sequelize.QueryTypes.UPDATE,
+        }
+      );
+    } catch (error) {
+      console.error("Error in MesUpdate:", error);
+    }
+  };
   
   return {
     // 處理 LINE 加好友事件
@@ -228,29 +253,25 @@ module.exports = ({ sequelize }) => {
       try {
         const mids = await Modselect(); 
         console.log("Line需發送筆數：" + mids.length);
-        console.log(JSON.stringify(mids))
         for (const odj of mids) {
-          // if (targetCustomerIds.includes(odj.customerId)) {
-          console.log("要發送" + JSON.stringify(odj.billId));
-
           const message = {
             type: "text",
             text: `${odj.req_message} `,
           };
-          // try {
-          //   await bot.push(odj.connectionId, message); // 推送訊息
-          //   await MesUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
-          //   console.log(`Message successfully pushed to ${odj.connectionId}`);
-          // } catch (error) {
-          //   await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
-          //   console.error(
-          //     `Error pushing message to ${odj.connectionId}:`,
-          //     error
-          //   );
-          // }
+          try {
+            await bot.push(odj.lineMid, message); // 推送訊息
+            await MesUpdate(odj.id, "成功"); 
+            console.log(`Message successfully pushed to ${odj.lineMid}`);
+          } catch (error) {
+            await MesUpdate(odj.id, error); 
+            console.error(
+              `Error pushing message to ${odj.lineMid}:`,
+              error
+            );
+          }
         }
       } catch (error) {
-        // await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+        await MesUpdate(odj.id, error); 
         console.error("Error in CronJob:", error);
       }
     },
