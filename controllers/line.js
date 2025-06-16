@@ -8,8 +8,6 @@ module.exports = ({ sequelize }) => {
   const utc = require("dayjs/plugin/utc");
   const timezone = require("dayjs/plugin/timezone");
   const bot = require("../config/bot.js"); // 從 bot.js 導入 bot
-
-
   const getDateTime = (input = null, timeFormat = "YYYY-MM-DD HH:mm:ss") => {
     dayjs.extend(utc);
     dayjs.extend(timezone);
@@ -25,6 +23,24 @@ module.exports = ({ sequelize }) => {
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, "0");
   let search_month = `${year}-${month}`;
+  const Modselect = async () => {
+    try {
+      let mids;
+        mids = await line_message.sequelize.query(
+          `
+          SELECT * FROM member001.notify where  timeStamp='0' and mode ='2'
+      
+        `,
+          {
+            type: db.sequelize.QueryTypes.SELECT, // 使用 SELECT 查询类型
+          }
+        );
+      return mids; // 返回篩選結果
+    } catch (error) {
+      console.error("Error in linepush:", error);
+      throw error;
+    }
+  };
 
   return {
     // 處理 LINE 加好友事件
@@ -152,29 +168,28 @@ module.exports = ({ sequelize }) => {
                   altText: "月租服務",
                   template: {
                     type: "buttons",
-                    text: `提供月租會員場站各項服務通知及電子帳單`,
+                    // text: `提供月租會員場站各項服務通知及電子帳單`,
                     actions: [
                       {
                         type: "uri",
                         label: "📝服務註冊",
-                        uri:"https://jutai.mitwit-cre.com.tw/login?openExternalBrowser=1",
+                        uri:`https://rental.mitwit-cre.com.tw/car-view?mid=${userId}&openExternalBrowser=1&bQz0fX8f=FPHHQsP7AMckqKe1nfL9`,
                       },
                       {
                         type: "uri",
                         label: "💰月租繳費",
-                        uri: "https://jutai.mitwit-cre.com.tw/login?openExternalBrowser=1",
+                        uri: `https://rental.mitwit-cre.com.tw/?mid=${userId}&openExternalBrowser=1&bQz0fX8f=FPHHQsP7AMckqKe1nfL9`,
                       },
-                      {
-                        type: "uri",
-                        label: "👨‍💻會員服務",
-                        uri: `https://rental.mitwit-cre.com.tw/?mid=${userId}&openExternalBrowser=1`,
-                        // uri: `https://rental.mitwit-cre.com.tw/?mid=U10fb04289f1d37ae1dfadf56fb8aa0c9&openExternalBrowser=1`,
-                      },
-                      {
-                        type: "uri",
-                        label: "🙂開始登記",
-                        uri: "https://jutai.mitwit-cre.com.tw/login?openExternalBrowser=1",
-                      },
+                      // {
+                      //   type: "uri",
+                      //   label: "👨‍💻會員服務",
+                      //   uri: `https://rental.mitwit-cre.com.tw/?mid=${userId}&openExternalBrowser=1&bQz0fX8f=FPHHQsP7AMckqKe1nfL9`,
+                      // },
+                      // {
+                      //   type: "uri",
+                      //   label: "🙂開始登記",
+                      //   uri: "https://jutai.mitwit-cre.com.tw/login?openExternalBrowser=1",
+                      // },
                     ],
                   },
                 },
@@ -183,5 +198,36 @@ module.exports = ({ sequelize }) => {
             } 
         }
     },
+    linepushCron: async (bot) => {
+      try {
+        const mids = await Modselect(); 
+        console.log("Line需發送筆數：" + mids.length);
+        console.log(JSON.stringify(mids))
+        for (const odj of mids) {
+          // if (targetCustomerIds.includes(odj.customerId)) {
+          console.log("要發送" + JSON.stringify(odj.billId));
+
+          const message = {
+            type: "text",
+            text: `${odj.req_message} `,
+          };
+          // try {
+          //   await bot.push(odj.connectionId, message); // 推送訊息
+          //   await MesUpdate(odj.id, "2"); // 推送成功，更新 sendType 為 "2"
+          //   console.log(`Message successfully pushed to ${odj.connectionId}`);
+          // } catch (error) {
+          //   await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+          //   console.error(
+          //     `Error pushing message to ${odj.connectionId}:`,
+          //     error
+          //   );
+          // }
+        }
+      } catch (error) {
+        await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+        console.error("Error in CronJob:", error);
+      }
+    },
   };
+  
 };
