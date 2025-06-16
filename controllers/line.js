@@ -168,7 +168,7 @@ module.exports = ({ sequelize }) => {
                   altText: "月租服務",
                   template: {
                     type: "buttons",
-                    // text: `提供月租會員場站各項服務通知及電子帳單`,
+                    text: `提供月租會員場站各項服務通知及電子帳單`,
                     actions: [
                       {
                         type: "uri",
