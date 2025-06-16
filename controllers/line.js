@@ -261,7 +261,7 @@ module.exports = ({ sequelize }) => {
             text: `${cleaned}`,
           };
           try {
-            await bot.push(odj.lineMid, message); // 推送訊息
+            // await bot.push(odj.lineMid, message); // 推送訊息
             await MesUpdate(odj.id, "成功"); 
             console.log(`Message successfully pushed to ${odj.lineMid}`);
           } catch (error) {
