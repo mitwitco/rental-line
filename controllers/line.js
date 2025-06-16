@@ -28,11 +28,11 @@ module.exports = ({ sequelize }) => {
       let mids;
         mids = await line_message.sequelize.query(
           `
-          SELECT * FROM member001.notify where  timeStamp='0' and mode ='2'
+          SELECT * FROM notify where  timeStamp='0' and mode ='2'
       
         `,
           {
-            type: db.sequelize.QueryTypes.SELECT, // 使用 SELECT 查询类型
+            type: line_message.sequelize.QueryTypes.SELECT, // 使用 SELECT 查询类型
           }
         );
       return mids; // 返回篩選結果
@@ -41,7 +41,30 @@ module.exports = ({ sequelize }) => {
       throw error;
     }
   };
-
+  const insertnotify = async (lineMid,resp_message) => {
+    const time = getDateTime();
+    try {
+        await line_message.sequelize.query(
+          `
+          INSERT INTO notify (lineMid, mode, resp_message, timeStamp,logDate)
+          VALUES (:lineMid, :mode, :resp_message, :timeStamp,:logDate)
+        `,
+        {
+          replacements: {
+            lineMid: lineMid,
+            mode: '1',
+            resp_message: resp_message,
+            timeStamp: time,
+            logDate: time
+          },
+          type: line_message.sequelize.QueryTypes.INSERT,
+        }
+        );
+    } catch (error) {
+      console.error("Error in linepush:", error);
+    }
+  };
+  
   return {
     // 處理 LINE 加好友事件
     linejoin: async (req, res) => {
@@ -195,7 +218,11 @@ module.exports = ({ sequelize }) => {
                 },
               ];
               await req.reply(messages); //發送
-            } 
+            } else if (req.message.type === "text" && req.message.text === "臨停服務") { 
+
+            } else if (req.message.type === "text") {
+              await insertnotify(userId,req.message.text); 
+            }
         }
     },
     linepushCron: async (bot) => {
@@ -224,7 +251,7 @@ module.exports = ({ sequelize }) => {
           // }
         }
       } catch (error) {
-        await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
+        // await MesUpdate(odj.id, "3"); // 推送失敗，更新 sendType 為 "3"
         console.error("Error in CronJob:", error);
       }
     },
