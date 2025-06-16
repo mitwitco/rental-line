@@ -254,9 +254,10 @@ module.exports = ({ sequelize }) => {
         const mids = await Modselect(); 
         console.log("Line需發送筆數：" + mids.length);
         for (const odj of mids) {
+          console.log(odj.req_message)
           const message = {
             type: "text",
-            text: `${odj.req_message} `,
+            text: `${odj.req_message}`,
           };
           try {
             await bot.push(odj.lineMid, message); // 推送訊息
