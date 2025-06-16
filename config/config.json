@@ -2,7 +2,7 @@
   "development": {
     "username": "mitwit_rental",
     "password": "mitwit56632513",
-    "database": "member000",
+    "database": "member001",
     "host": "219.85.83.15",
     "port": "3306",
     "dialect": "mysql",
@@ -21,7 +21,7 @@
   "production": {
     "username": "mitwit_rental",
     "password": "mitwit56632513",
-    "database": "member000",
+    "database": "member001",
     "host": "219.85.83.15",
     "port": "3306",
     "dialect": "mysql",
