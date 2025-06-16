@@ -46,8 +46,8 @@ module.exports = ({ sequelize }) => {
     try {
         await line_message.sequelize.query(
           `
-          INSERT INTO notify (lineMid, mode, resp_message, timeStamp,logDate)
-          VALUES (:lineMid, :mode, :resp_message, :timeStamp,:logDate)
+          INSERT INTO notify (lineMid, mode, resp_message, timeStamp)
+          VALUES (:lineMid, :mode, :resp_message, :timeStamp)
         `,
         {
           replacements: {
@@ -55,7 +55,6 @@ module.exports = ({ sequelize }) => {
             mode: '1',
             resp_message: resp_message,
             timeStamp: time,
-            logDate: time
           },
           type: line_message.sequelize.QueryTypes.INSERT,
         }
