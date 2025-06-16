@@ -70,7 +70,7 @@ module.exports = ({ sequelize }) => {
         `
         UPDATE notify 
         SET 
-          timeStamp = :timeStamp
+          timeStamp = :timeStamp,
           status= :status
         WHERE id = :id
         `,
