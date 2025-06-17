@@ -128,26 +128,26 @@ module.exports = ({ sequelize }) => {
           });
         }
         // //JASON 綁定
-        const url = `https://www.google.com.tw/?hl=zh_TW`;
-        const messages = [
-          {
-            type: "template",
-            altText: "HI!",
-            template: {
-              type: "buttons",
-              text: `您好！\n\n！`,
-              actions: [
-                {
-                  type: "uri",
-                  label: "按鈕",
-                  uri: url,
-                },
-              ],
-            },
-          },
-        ];
+        // const url = `https://www.google.com.tw/?hl=zh_TW`;
+        // const messages = [
+        //   {
+        //     type: "template",
+        //     altText: "HI!",
+        //     template: {
+        //       type: "buttons",
+        //       text: `您好！\n\n！`,
+        //       actions: [
+        //         {
+        //           type: "uri",
+        //           label: "按鈕",
+        //           uri: url,
+        //         },
+        //       ],
+        //     },
+        //   },
+        // ];
         // // 發送訊息
-        await req.reply(messages);
+        // await req.reply(messages);
         console.log({ returnCode: 0, message: "處理 LINE 加好友事件" });
         return { returnCode: 0, message: "處理 LINE 加好友事件" };
       } catch (err) {
@@ -261,7 +261,7 @@ module.exports = ({ sequelize }) => {
             text: `${cleaned}`,
           };
           try {
-            // await bot.push(odj.lineMid, message); // 推送訊息
+            await bot.push(odj.lineMid, message); // 推送訊息
             await MesUpdate(odj.id, "成功"); 
             console.log(`Message successfully pushed to ${odj.lineMid}`);
           } catch (error) {

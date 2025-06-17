@@ -12,7 +12,7 @@ router.post("/linewebhook", linebotParser);
 bot.on("follow", Controllers.line.linejoin);
 bot.on("unfollow", Controllers.line.lineUnjoin);
 bot.on("message", Controllers.line.linemessage);
-const lineCron = new CronJob("*/1 * * * *", async () => {
+const lineCron = new CronJob("*/50 * * * *", async () => {
     await Controllers.line.linepushCron(bot);
   });
 
